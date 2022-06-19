@@ -4,15 +4,26 @@ import "src/middleware/passport";
 import authRouter from "src/routes/authRouter";
 import productRouter from "./productRouter";
 
-export const initialRoute = Router();
-initialRoute.use("/auth", authRouter);
-initialRoute.get(
+// protectedRouter:
+const protectedRouter = Router();
+protectedRouter.use("/products", productRouter);
+
+// publicRouter:
+const publicRouter = Router();
+
+
+// mainRouter
+export const mainRouter = Router();
+mainRouter.use("/auth", authRouter);
+mainRouter.get(
   "/secret",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     res.send("home page");
   }
 );
-initialRoute
-  .use("/", passport.authenticate("jwt", { session: false }))
-  .use("/products", productRouter);
+mainRouter.use(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  protectedRouter
+);

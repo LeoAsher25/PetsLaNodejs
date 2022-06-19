@@ -2,7 +2,7 @@ require("dotenv").config();
 import appRootPath from "app-root-path";
 import express from "express";
 import connectDB from "src/config/db";
-import { initialRoute } from "src/routes";
+import { mainRouter } from "src/routes";
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(appRootPath.path + "/public"));
 
-app.use(initialRoute);
+app.use(mainRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
