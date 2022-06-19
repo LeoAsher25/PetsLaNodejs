@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import { productController } from "src/controllers";
 import "src/middleware/passport";
 import authRouter from "src/routes/authRouter";
 import productRouter from "./productRouter";
@@ -11,19 +12,26 @@ protectedRouter.use("/products", productRouter);
 // publicRouter:
 const publicRouter = Router();
 
-
 // mainRouter
 export const mainRouter = Router();
 mainRouter.use("/auth", authRouter);
-mainRouter.get(
-  "/secret",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    res.send("home page");
-  }
-);
 mainRouter.use(
-  "/",
+  "/products",
   passport.authenticate("jwt", { session: false }),
-  protectedRouter
+  productRouter
 );
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Welcome to swagger-jsdoc!
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
+
+mainRouter.get("/", (req, res) => {
+  console.log("hello world");
+  return res.send("Hello world!");
+});

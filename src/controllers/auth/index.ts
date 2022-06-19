@@ -21,7 +21,7 @@ export default class AuthController extends CrudController {
   }
 
   private encodedToken = (
-    userId: string,
+    userId: any,
     username: string,
     tokenType: ETokenType
   ): string => {
@@ -211,10 +211,8 @@ export default class AuthController extends CrudController {
         }
       );
 
-      console.log("response: ", newToken);
       return res.status(200).json({ token: newToken });
     } catch (error) {
-      console.log("error refresh: ", error);
       return res.status(400).json(error);
     }
   };
