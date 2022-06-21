@@ -104,6 +104,6 @@
       "src/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "server.ts"],
   "exclude": ["node_modules"]
 }
