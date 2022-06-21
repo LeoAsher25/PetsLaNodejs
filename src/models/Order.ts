@@ -1,30 +1,25 @@
 import mongoose, { Schema } from "mongoose";
 import { UserSchema } from "./User";
 
+const OrderItemSchema = new Schema({
+  title: String,
+  price: Number,
+  quantity: Number,
+});
+
 const OrderSchema = new Schema(
   {
     totalPrice: {
       type: Number,
-      required: true,
     },
     orderer: {
-      type: UserSchema,
-      required: true,
+      type: String,
     },
-    recipientInfo: {
-      type: Object,
+    deliveryInfo: {
+      type: String,
     },
-    // recipientName: {
-    //   type: String,
-    // },
-    // receivingAddress: {
-    //   type: String,
-    // },
-    // receivingPhone: {
-    //   type: String,
-    // },
     itemList: {
-      type: [Object],
+      type: [OrderItemSchema],
     },
     note: {
       type: String,

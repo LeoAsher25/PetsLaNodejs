@@ -2,6 +2,18 @@ import mongoose, { CallbackError, Schema } from "mongoose";
 import validationHelper from "src/helpers/validation";
 
 import bcrypt from "bcryptjs";
+import { UserDoc } from "src/types/userTypes";
+
+export const DeliveryAddressSchema = new Schema(
+  {
+    name: String,
+    address: String,
+    phoneNumber: String,
+  },
+  {
+    timestamps: true,
+  }
+);
 
 export const UserSchema = new Schema<UserDoc>(
   {
@@ -28,20 +40,14 @@ export const UserSchema = new Schema<UserDoc>(
       required: [true, "Password is required!"],
       validate: [validationHelper.isValidPassword, "Password is incorrect!"],
     },
+    deliveryAddress: {
+      type: [DeliveryAddressSchema],
+    },
   },
   {
     timestamps: true,
   }
 );
-
-export interface UserDoc extends mongoose.Document {
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  password: string;
-  verifyPassword: (pw: string) => Promise<boolean>;
-}
 
 UserSchema.methods.verifyPassword = async function (newPassword: string) {
   try {

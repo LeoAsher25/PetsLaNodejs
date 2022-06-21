@@ -123,12 +123,12 @@ export default class AuthController extends CrudController {
     }
   };
 
-  public read(
+  public read = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
-  ): void {
-    res.send("GET /user request received");
-  }
+  ): Promise<Response<any, Record<string, any>>> => {
+    return res.send("GET /user request received");
+  };
 
   //handle login
   public handleLogin = async (
@@ -217,17 +217,17 @@ export default class AuthController extends CrudController {
     }
   };
 
-  public update(
+  public update = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
-  ): void {
+  ): Promise<Response<any, Record<string, any>>> => {
     throw new Error("Method not implemented.");
-  }
+  };
 
-  public delete(
+  public delete = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
-  ): void {
+  ): Promise<Response<any, Record<string, any>>> => {
     throw new Error("Method not implemented.");
-  }
+  };
 }
