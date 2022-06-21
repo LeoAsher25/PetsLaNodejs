@@ -2,7 +2,7 @@
   "name": "petsla",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "nodemon -r tsconfig-paths/register src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
