@@ -1,0 +1,334 @@
+[{
+  "_id": {
+    "$oid": "62aca95b5aa289ce9e72d187"
+  },
+  "title": "Chú mèo Amuse Cat may mắn",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 240000,
+  "images": [
+    "https://i.pinimg.com/736x/84/9c/dd/849cdd9bcd4af1998d0915830a37022c.jpg",
+    "https://i.pinimg.com/736x/52/c4/86/52c486ac9b5c6e3a130c6eb852333fdb.jpg",
+    "https://w0.peakpx.com/wallpaper/573/340/HD-wallpaper-a-cute-couple-3-cute-cats-couple-animals.jpg",
+    "https://i.pinimg.com/736x/d4/c8/48/d4c8488e3275250c9693d1a69f379126.jpg"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655482715610"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655482715610"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaa445aa289ce9e72d18a"
+  },
+  "title": "Couple cat so so cute",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 360000,
+  "images": [
+    "https://www.pinterest.com/pin/542824561335513593/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655482948922"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655482948922"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaa515aa289ce9e72d18d"
+  },
+  "title": "Couple cat so so cute 1",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 350000,
+  "images": [
+    "https://www.pinterest.com/pin/729442470900089202/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655482961132"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655482961132"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaa615aa289ce9e72d190"
+  },
+  "title": "Couple cat so so cute 2",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 350000,
+  "images": [
+    "https://www.pinterest.com/pin/729442470900089202/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655482977264"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655482977264"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaa6d5aa289ce9e72d193"
+  },
+  "title": "Couple cat so so cute 3",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 300000,
+  "images": [
+    "https://www.pinterest.com/pin/542824561335513593/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655482989168"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655482989168"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaaa75aa289ce9e72d196"
+  },
+  "title": "Couple cat so so cute 4",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 1000000,
+  "images": [
+    "https://www.pinterest.com/pin/739997782529657317/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655483047151"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655483047151"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acae905aa289ce9e72d199"
+  },
+  "title": "Couple cat so so cute 5",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 1000000,
+  "images": [
+    "https://www.pinterest.com/pin/678706606354672453/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484048204"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484048204"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acae995aa289ce9e72d19c"
+  },
+  "title": "Couple cat so so cute 6",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 500000,
+  "images": [
+    "https://www.pinterest.com/pin/678706606354672453/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484057008"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484057008"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaea25aa289ce9e72d19f"
+  },
+  "title": "Couple cat so so cute 7",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 600000,
+  "images": [
+    "https://www.pinterest.com/pin/180003316363616528/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484066309"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484066309"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaea85aa289ce9e72d1a2"
+  },
+  "title": "Couple cat so so cute 8",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 420000,
+  "images": [
+    "https://www.pinterest.com/pin/180003316359012128/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484072613"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484072613"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaec45aa289ce9e72d1a5"
+  },
+  "title": "Couple cat so so cute 9",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 200000,
+  "images": [
+    "https://www.pinterest.com/pin/542824561336167225/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484100629"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484100629"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaed25aa289ce9e72d1a8"
+  },
+  "title": "Couple cat so so cute 10",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 240000,
+  "images": [
+    "https://www.pinterest.com/pin/92886811056500076/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484114166"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484114166"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaf275aa289ce9e72d1ab"
+  },
+  "title": "Couple cat so so cute 11",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 450000,
+  "images": [
+    "https://www.pinterest.com/pin/542824561334702126/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484199085"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484199085"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaf345aa289ce9e72d1ae"
+  },
+  "title": "Couple cat so so cute 12",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 490000,
+  "images": [
+    "https://www.pinterest.com/pin/542824561334675834/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484212256"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484212256"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62acaf405aa289ce9e72d1b1"
+  },
+  "title": "Couple cat so so cute 13",
+  "description": "Amuse - Những chiếc mèo bông mang đến niềm vui và may mắn.\n\nKhông chỉ để trưng bày, để ôm, tụi Amuse còn mang đến cho bạn những điều may mắn, hạnh phúc và niềm vui đến với bạn. \n\nBạn có muốn đón nhận những điều tốt đẹp từ Amuse không nè?\n\n- Chất liệu: Nỉ và bông cao cấp. \n\n- Kích thước: size 30 và size 40cm. \n\n- Phân loại: Xám và Đen.",
+  "price": 280000,
+  "images": [
+    "https://www.pinterest.com/pin/542824561334582354/"
+  ],
+  "stock": 1000,
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655484224801"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655484224801"
+    }
+  },
+  "__v": 0
+}]

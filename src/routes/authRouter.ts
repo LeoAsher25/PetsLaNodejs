@@ -1,7 +1,7 @@
-import "src/middleware/passport";
 import express from "express";
 import passport from "passport";
 import { authController } from "src/controllers";
+import "src/middleware/passport";
 
 const authRouter = express.Router();
 

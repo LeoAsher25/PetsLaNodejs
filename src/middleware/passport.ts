@@ -12,7 +12,6 @@ passport.use(
       secretOrKey: process.env.JWT_SECRET_ACCESS_TOKEN,
     },
     async (payload, done) => {
-      console.log("first")
       try {
         const user = await User.findById(payload.sub);
         if (!user) {
@@ -32,13 +31,14 @@ passport.use(
       const foundUser = await User.findOne({ username });
 
       if (!foundUser) {
-        return done(null, false);
+        return done(null, true);
       }
 
       const isCorrectPassword = await foundUser.verifyPassword(password);
       if (!isCorrectPassword) {
-        return done(null, false);
+        return done(null, true);
       }
+
       return done(null, foundUser);
     } catch (error) {
       done(error as CallbackError, false);

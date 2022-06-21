@@ -3,14 +3,14 @@ import validationHelper from "src/helpers/validation";
 
 import bcrypt from "bcryptjs";
 
-export const UserSchema = new Schema(
+export const UserSchema = new Schema<UserDoc>(
   {
     firstName: { type: String },
     lastName: { type: String },
     username: {
       type: String,
       required: [true, "Username is required!"],
-      unique: [true],
+      unique: true,
       validate: [
         validationHelper.isValidUsername,
         "Please enter a valid username!",
@@ -34,7 +34,25 @@ export const UserSchema = new Schema(
   }
 );
 
-UserSchema.pre("save", async function (next) {
+export interface UserDoc extends mongoose.Document {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  verifyPassword: (pw: string) => Promise<boolean>;
+}
+
+UserSchema.methods.verifyPassword = async function (newPassword: string) {
+  try {
+    const isValid = await bcrypt.compare(newPassword, this.password);
+    return isValid;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+UserSchema.pre<UserDoc>("save", async function (next) {
   try {
     // generate a salt
     const salt = await bcrypt.genSalt(10);
@@ -47,14 +65,6 @@ UserSchema.pre("save", async function (next) {
     next(error as CallbackError);
   }
 });
-
-UserSchema.methods.verifyPassword = async function (newPassword: string) {
-  try {
-    return await bcrypt.compare(newPassword, this.password);
-  } catch (error) {
-    throw new Error(error as string);
-  }
-};
 
 const User = mongoose.model("User", UserSchema);
 export default User;

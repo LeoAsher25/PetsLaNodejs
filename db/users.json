@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "62aa20ad585948c9081cc817"
+  },
+  "firstName": "Leo4",
+  "lastName": "Asher",
+  "username": "leoasher04",
+  "email": "leoasher04@gmail.com",
+  "password": "$2a$10$naXzZNOXUKSkf5pEFsJNQu50bUu3jRyqKTeqeK2d4mJ0qOyxvtTpW",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655316653745"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655316653745"
+    }
+  },
+  "__v": 0
+}]

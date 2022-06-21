@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "62ab75a2f336ea35e46de8be"
+  },
+  "userId": {
+    "$oid": "62aa20ad585948c9081cc817"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsZW9hc2hlcjA0Iiwic3ViIjoiNjJhYTIwYWQ1ODU5NDhjOTA4MWNjODE3IiwiaWF0IjoxNjU1NDAzOTM4LCJleHAiOjE2NTc5OTU5Mzh9.wtARtBm2VMvDdSqYCKS1DTPaNuz6O5DNzArU1N8eUKw",
+  "expireAt": "1655406503140",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1655403938703"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1655403938703"
+    }
+  },
+  "__v": 0
+}]
