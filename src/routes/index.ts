@@ -1,13 +1,13 @@
 import { Router } from "express";
 import passport from "passport";
-import { productController } from "src/controllers";
 import "src/middleware/passport";
 import authRouter from "src/routes/authRouter";
 import productRouter from "./productRouter";
+import userRouter from "./userRoutes";
 
 // protectedRouter:
 const protectedRouter = Router();
-protectedRouter.use("/products", productRouter);
+protectedRouter.use("/user", userRouter).use("/products", productRouter);
 
 // publicRouter:
 const publicRouter = Router();
@@ -16,9 +16,9 @@ const publicRouter = Router();
 export const mainRouter = Router();
 mainRouter.use("/auth", authRouter);
 mainRouter.use(
-  "/products",
+  "/",
   passport.authenticate("jwt", { session: false }),
-  productRouter
+  protectedRouter
 );
 
 /**
