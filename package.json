@@ -7,8 +7,10 @@
     "node": "14.x"
   },
   "scripts": {
-    "start": "nodemon -r tsconfig-paths/register server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon -r tsconfig-paths/register server.ts",
+    "start": "node -r ./tsconfig-path-bootstrap.js dist/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
   },
   "author": "",
   "license": "ISC",
