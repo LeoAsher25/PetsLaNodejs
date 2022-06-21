@@ -2,12 +2,16 @@ import { Router } from "express";
 import passport from "passport";
 import "src/middleware/passport";
 import authRouter from "src/routes/authRouter";
+import orderRouter from "./OrderRouter";
 import productRouter from "./productRouter";
 import userRouter from "./userRoutes";
 
 // protectedRouter:
 const protectedRouter = Router();
-protectedRouter.use("/user", userRouter).use("/products", productRouter);
+protectedRouter
+  .use("/user", userRouter)
+  .use("/products", productRouter)
+  .use("/order", orderRouter);
 
 // publicRouter:
 const publicRouter = Router();
