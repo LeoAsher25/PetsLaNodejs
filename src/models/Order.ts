@@ -9,13 +9,10 @@ const OrderItemSchema = new Schema({
 
 const OrderSchema = new Schema(
   {
-    totalPrice: {
-      type: Number,
-    },
     orderer: {
       type: String,
     },
-    deliveryInfo: {
+    deliveryInfoId: {
       type: String,
     },
     itemList: {
