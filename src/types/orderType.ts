@@ -1,9 +1,29 @@
-export interface IOrder {
-  totalPrice: number;
+export interface IRequestOrderData {
   orderer: string;
-  deliveryInfo: string;
-  itemList: string[];
+  deliveryInfoId: string;
+  itemList: IOrderProduct[];
   note: string;
-  orderStatus: string;
-  voucher: string;
+  voucher?: string;
+}
+
+export interface IOrder extends IRequestOrderData {
+  orderStatus: EOrderStatus;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: string;
+}
+
+export enum EOrderStatus {
+  PENDING = "pending",
+  SHIPING = "shiping",
+  DELIVERED = "delivered",
+  CANCELLED = "cancelled",
+}
+
+export interface IOrderProduct {
+  _id: string;
+  title: string;
+  price: number;
+  quantity: number;
 }
