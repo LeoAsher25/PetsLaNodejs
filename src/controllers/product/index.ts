@@ -6,6 +6,25 @@ import Product from "src/models/Product";
 import { CrudController } from "../CrudController";
 
 export default class ProductController extends CrudController {
+  public getAll = async (
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>
+  ): Promise<Response<any, Record<string, any>>> => {
+    try {
+      const allProduct = await Product.find({});
+      return res.status(200).json({
+        products: allProduct,
+      });
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+  };
+  public getOne(
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>
+  ): Promise<Response<any, Record<string, any>>> {
+    throw new Error("Method not implemented.");
+  }
   public create = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
@@ -21,19 +40,13 @@ export default class ProductController extends CrudController {
       return res.status(400).json(error);
     }
   };
-  public read = async (
+  public read(
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
-    try {
-      const allProduct = await Product.find({});
-      return res.status(200).json({
-        products: allProduct,
-      });
-    } catch (error) {
-      return res.status(400).json(error);
-    }
-  };
+  ): Promise<Response<any, Record<string, any>>> {
+    throw new Error("Method not implemented.");
+  }
+
   public update = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>

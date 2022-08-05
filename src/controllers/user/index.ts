@@ -4,16 +4,23 @@ import mongoose from "mongoose";
 import { ParsedQs } from "qs";
 import { CrudController } from "src/controllers/CrudController";
 import User from "src/models/User";
-import { IDeliveryAddress, IUser } from "src/types/userTypes";
+import { IAddress, IUser } from "src/types/userTypes";
 
 export default class UserController extends CrudController {
-  public create = async (
+  public getAll = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
-    throw new Error("Method not implemented.");
+    try {
+      const query = req.query;
+      console.log("query: ", query);
+
+      return res.status(200).json();
+    } catch (error) {
+      return res.status(400).json(error);
+    }
   };
-  public read = async (
+  public getOne = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
@@ -23,6 +30,18 @@ export default class UserController extends CrudController {
       return res.status(400).json(error);
     }
   };
+  public create = async (
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>
+  ): Promise<Response<any, Record<string, any>>> => {
+    throw new Error("Method not implemented.");
+  };
+  public read(
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>
+  ): Promise<Response<any, Record<string, any>>> {
+    throw new Error("Method not implemented.");
+  }
   public update = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
@@ -82,7 +101,7 @@ export default class UserController extends CrudController {
     try {
       const requestData = req.body;
       const user = req.user as IUser;
-      const currentAddressList: IDeliveryAddress[] = user.deliveryAddress;
+      const currentAddressList: IAddress[] = user.deliveryAddress;
       currentAddressList.unshift({
         ...requestData,
       });

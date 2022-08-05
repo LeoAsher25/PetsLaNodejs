@@ -3,7 +3,6 @@ import { ParamsDictionary } from "express-serve-static-core";
 import JWT from "jsonwebtoken";
 import mongoose from "mongoose";
 import { ParsedQs } from "qs";
-import { CrudController } from "src/controllers/CrudController";
 import User from "src/models/User";
 import UserToken from "src/models/UserToken";
 import { IUser } from "src/types/userTypes";
@@ -13,12 +12,10 @@ enum ETokenType {
   REFRESH_TOKEN = "refreshToken",
 }
 
-export default class AuthController extends CrudController {
+export default class AuthController {
   tokenList: { [key: string]: object } = {};
 
-  constructor() {
-    super();
-  }
+  constructor() {}
 
   private encodedToken = (
     userId: any,
@@ -58,7 +55,7 @@ export default class AuthController extends CrudController {
   };
 
   // handle signup
-  public create = async (
+  public handleSignup = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
@@ -123,13 +120,6 @@ export default class AuthController extends CrudController {
     }
   };
 
-  public read = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
-    return res.send("GET /user request received");
-  };
-
   //handle login
   public handleLogin = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
@@ -157,7 +147,7 @@ export default class AuthController extends CrudController {
 
     const userToken = await UserToken.findOne({ userId: foundUser._id });
     if (userToken) {
-      jsonResponse["refreshToken"] = userToken.token;
+      jsonResponse["refreshToken"] = userToken.token as string;
     } else {
       const refreshToken: string = this.encodedToken(
         foundUser._id,
@@ -215,19 +205,5 @@ export default class AuthController extends CrudController {
     } catch (error) {
       return res.status(400).json(error);
     }
-  };
-
-  public update = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
-    throw new Error("Method not implemented.");
-  };
-
-  public delete = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
-    throw new Error("Method not implemented.");
   };
 }

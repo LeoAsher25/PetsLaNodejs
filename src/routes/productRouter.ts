@@ -3,7 +3,7 @@ import { productController } from "src/controllers";
 const productRouter = express.Router();
  
 productRouter
-  .get("/", productController.read)
+  .get("/", productController.getAll)
   .post("/", productController.create)
   .put("/", productController.update)
   .delete("/", productController.delete);

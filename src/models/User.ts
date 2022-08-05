@@ -1,21 +1,11 @@
 import mongoose, { CallbackError, Schema } from "mongoose";
 import validationHelper from "src/helpers/validation";
+import { AddressSchema } from "./Address";
 
 import bcrypt from "bcryptjs";
-import { UserDoc } from "src/types/userTypes";
+import { IUser } from "src/types/userTypes";
 
-export const DeliveryAddressSchema = new Schema(
-  {
-    name: String,
-    address: String,
-    phoneNumber: String,
-  },
-  {
-    timestamps: true,
-  }
-);
-
-export const UserSchema = new Schema<UserDoc>(
+export const UserSchema = new Schema<IUser>(
   {
     firstName: { type: String },
     lastName: { type: String },
@@ -41,7 +31,10 @@ export const UserSchema = new Schema<UserDoc>(
       validate: [validationHelper.isValidPassword, "Password is incorrect!"],
     },
     deliveryAddress: {
-      type: [DeliveryAddressSchema],
+      type: [AddressSchema],
+    },
+    role: {
+      type: [String],
     },
   },
   {
@@ -58,14 +51,14 @@ UserSchema.methods.verifyPassword = async function (newPassword: string) {
   }
 };
 
-UserSchema.pre<UserDoc>("save", async function (next) {
+UserSchema.pre<IUser>("save", async function (next) {
   try {
     // generate a salt
     const salt = await bcrypt.genSalt(10);
     // generate a password hash (salt + hash)
-    const passwordHashed = await bcrypt.hash(this.password, salt);
+    const passwordHashed = await bcrypt.hash(this.password!, salt);
     // re-assign password hashed
-    this.password = passwordHashed;
+    this.password! = passwordHashed;
     next();
   } catch (error) {
     next(error as CallbackError);

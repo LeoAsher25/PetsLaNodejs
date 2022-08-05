@@ -29,12 +29,13 @@ passport.use(
   new PassportLocal.Strategy(async function (username, password, done) {
     try {
       const foundUser = await User.findOne({ username });
+      console.log("foundUser: ", foundUser);
 
       if (!foundUser) {
         return done(null, true);
       }
 
-      const isCorrectPassword = await foundUser.verifyPassword(password);
+      const isCorrectPassword = await foundUser.verifyPassword!(password);
       if (!isCorrectPassword) {
         return done(null, true);
       }

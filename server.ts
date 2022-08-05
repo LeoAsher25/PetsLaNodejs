@@ -6,13 +6,11 @@ import { mainRouter } from "src/routes";
 
 import swaggerJSDoc from "swagger-jsdoc";
 import SwaggerUI from "swagger-ui-express";
-import swaggerDocument from "swagger.json";
 
 const app = express();
 
 const port = process.env.PORT || 3000;
 connectDB();
-
 
 const options = {
   definition: {
@@ -60,7 +58,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(appRootPath.path + "/public"));
 
-app.use(mainRouter);
+app.use("/api/v1", mainRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
