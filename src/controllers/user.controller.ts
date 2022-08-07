@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import mongoose from "mongoose";
 import { ParsedQs } from "qs";
-import { CrudController } from "src/controllers/CrudController";
+import { CrudController } from "src/controllers/crud.controller";
 import User from "src/models/User";
-import { IAddress, IUser } from "src/types/userTypes";
+import { IAddress, IUser } from "src/types/user.types";
 
 export default class UserController extends CrudController {
   public getAll = async (
@@ -139,6 +139,45 @@ export default class UserController extends CrudController {
       return res.status(200).json({
         message: "Delete address successfully!",
       });
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+  };
+  public query = async (
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>
+  ): Promise<Response<any, Record<string, any>>> => {
+    try {
+      const query = [
+        {
+          $match: {
+            age: {
+              $gte: 21,
+            },
+            "address.name": "Ha Dong",
+          },
+        },
+        {
+          $project: {
+            name: 1,
+            age: 1,
+            address: 1,
+          },
+        },
+        {
+          $sort: {
+            age: 1,
+          },
+        },
+      ];
+
+      const response = await User.find({
+        age: {
+          $gt: 21,
+        },
+      });
+      console.log("response: ", response);
+      return res.status(200).json(response);
     } catch (error) {
       return res.status(400).json(error);
     }

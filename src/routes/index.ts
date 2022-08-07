@@ -1,11 +1,11 @@
 import { Router } from "express";
 import passport from "passport";
 import "src/middleware/passport";
-import authRouter from "src/routes/authRouter";
-import orderRouter from "src/routes/orderRouter";
-import permissionRouters from "src/routes/permissionRouter";
-import productRouter from "src/routes/productRouter";
-import userRouter from "src/routes/userRoutes";
+import authRouter from "src/routes/auth.router";
+import orderRouter from "src/routes/order.router";
+import permissionRouters from "src/routes/permission.router";
+import productRouter from "src/routes/product.router";
+import userRouter from "src/routes/user.routes";
 
 // protectedRouter:
 const protectedRouter = Router();

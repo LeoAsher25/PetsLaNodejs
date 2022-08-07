@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { ParsedQs } from "qs";
 import User from "src/models/User";
 import UserToken from "src/models/UserToken";
-import { IUser } from "src/types/userTypes";
+import { IUser } from "src/types/user.types";
 
 enum ETokenType {
   ACCESS_TOKEN = "accessToken",

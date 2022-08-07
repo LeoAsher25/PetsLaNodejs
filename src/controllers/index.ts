@@ -1,10 +1,10 @@
-import AuthController from "src/controllers/auth";
-import OrderController from "./order";
-import PermissionController from "./permission";
-import ProductController from "./product";
-import RoleController from "./role";
+import AuthController from "src/controllers/auth.controller";
+import OrderController from "./order.controller";
+import PermissionController from "./permission.controller";
+import ProductController from "./product.controller";
+import RoleController from "./role.controller";
 2;
-import UserController from "./user";
+import UserController from "./user.controller";
 
 const authController = new AuthController();
 const productController = new ProductController();

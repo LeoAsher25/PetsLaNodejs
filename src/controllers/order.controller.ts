@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import Order from "src/models/Order";
-import { EOrderStatus, IRequestOrderData } from "src/types/orderType";
-import { CrudController } from "../CrudController";
+import { EOrderStatus, IRequestOrderData } from "src/types/order.type";
+import { CrudController } from "./crud.controller";
 
 export default class OrderController extends CrudController {
   public getAll = async (

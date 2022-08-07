@@ -7,6 +7,7 @@ userRouter
   .get("/", userController.getAll)
   .get("/address", userController.getAllAddress)
   .post("/address", userController.addAddress)
-  .delete("/address", userController.deleteAddress);
+  .delete("/address", userController.deleteAddress)
+  .get('/query', userController.query)
 
 export default userRouter;

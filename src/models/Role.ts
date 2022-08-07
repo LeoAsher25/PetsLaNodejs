@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IRole } from "src/types/userTypes";
+import { IRole } from "src/types/user.types";
 export const RoleSchema = new mongoose.Schema<IRole>(
   {
     name: {
@@ -8,14 +8,19 @@ export const RoleSchema = new mongoose.Schema<IRole>(
     description: {
       type: String,
     },
-    permission: {
-      type: [String],
-    },
+    permission: [
+      {
+        type: {
+          _id: mongoose.Schema.Types.ObjectId,
+          name: String,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
 
-const Role = mongoose.model("UserRole", RoleSchema);
+const Role = mongoose.model("Role", RoleSchema);
 export default Role;

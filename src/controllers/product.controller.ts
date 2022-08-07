@@ -3,7 +3,7 @@ import { ParamsDictionary } from "express-serve-static-core";
 import mongoose from "mongoose";
 import { ParsedQs } from "qs";
 import Product from "src/models/Product";
-import { CrudController } from "../CrudController";
+import { CrudController } from "./crud.controller";
 
 export default class ProductController extends CrudController {
   public getAll = async (

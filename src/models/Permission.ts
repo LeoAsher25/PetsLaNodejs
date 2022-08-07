@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IPermission } from "src/types/userTypes";
+import { IPermission } from "src/types/user.types";
 export const PermissionSchema = new mongoose.Schema<IPermission>(
   {
     name: {
@@ -14,5 +14,5 @@ export const PermissionSchema = new mongoose.Schema<IPermission>(
   }
 );
 
-const Permission = mongoose.model("Role", PermissionSchema);
+const Permission = mongoose.model("Permission", PermissionSchema);
 export default Permission;

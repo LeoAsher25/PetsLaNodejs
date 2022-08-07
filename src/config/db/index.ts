@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { MongoClient } from "mongodb";
 
 async function connectDB() {
   try {
@@ -8,4 +9,6 @@ async function connectDB() {
     console.log("Connect DB error: ", error);
   }
 }
+
+export const mongoClient = new MongoClient("mongodb://localhost/PetsLa");
 export default connectDB;
