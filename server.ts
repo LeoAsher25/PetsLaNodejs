@@ -17,42 +17,24 @@ const options = {
     openapi: "3.0.0",
     info: {
       title: "Hello World",
-      version: "1.0.0",
-      servsers: ["http://localhost:3000"],
+      version: "0.1.0",
       description: "Customer API Information",
       contact: {
         name: "Amazing Developer",
       },
     },
-  },
-  apis: ["**/*.ts"],
-};
-
-const swaggerOptions: swaggerJSDoc.Options = {
-  definition: {
-    swagger: "2.0",
-    info: {
-      title: "Customer API",
-      description: "Customer API Information",
-      contact: {
-        name: "Amazing Developer",
+    servsers: [
+      {
+        url: "http://localhost:3000",
+        description: "Localhost server",
       },
-      servsers: ["http://localhost:3000"],
-      version: "1.0",
-    },
+    ],
   },
-  apis: ["./index.ts"],
+  apis: ["./src/routes/*.ts"],
 };
 
-const swaggerUiOption: SwaggerUI.SwaggerUiOptions = {
-  explorer: true,
-};
 const swaggerDocs = swaggerJSDoc(options);
-app.use(
-  "/api-docs",
-  SwaggerUI.serve,
-  SwaggerUI.setup(swaggerDocs, swaggerUiOption)
-);
+app.use("/api-docs", SwaggerUI.serve, SwaggerUI.setup(swaggerDocs));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

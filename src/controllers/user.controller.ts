@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { ParsedQs } from "qs";
 import { CrudController } from "src/controllers/crud.controller";
 import User from "src/models/User";
+import { EStatusCodes } from "src/types/status-code.enum";
 import { IAddress, IUser } from "src/types/user.types";
 
 export default class UserController extends CrudController {
@@ -13,11 +14,10 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const query = req.query;
-      console.log("query: ", query);
 
-      return res.status(200).json();
+      return res.status(EStatusCodes.OK).json();
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(EStatusCodes.BAD_REQUEST).json(error);
     }
   };
   public getOne = async (
@@ -25,9 +25,9 @@ export default class UserController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      return res.status(200).json(req.user);
+      return res.status(EStatusCodes.OK).json(req.user);
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(EStatusCodes.BAD_REQUEST).json(error);
     }
   };
   public create = async (
@@ -61,7 +61,7 @@ export default class UserController extends CrudController {
         });
       }
 
-      return res.status(200).json({
+      return res.status(EStatusCodes.OK).json({
         user: updatedData,
       });
     } catch (error) {
@@ -71,7 +71,7 @@ export default class UserController extends CrudController {
           message: "User _id not found!",
         });
       }
-      return res.status(400).json(error);
+      return res.status(EStatusCodes.BAD_REQUEST).json(error);
     }
   };
 
@@ -88,9 +88,9 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     const user = req.user!;
     try {
-      return res.status(200).json((user as IUser).deliveryAddress);
+      return res.status(EStatusCodes.OK).json((user as IUser).addresses);
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(EStatusCodes.BAD_REQUEST).json(error);
     }
   };
 
@@ -101,20 +101,20 @@ export default class UserController extends CrudController {
     try {
       const requestData = req.body;
       const user = req.user as IUser;
-      const currentAddressList: IAddress[] = user.deliveryAddress;
+      const currentAddressList: IAddress[] = user.addresses;
       currentAddressList.unshift({
         ...requestData,
       });
 
       await User.findOneAndUpdate(
         { _id: user._id },
-        { ...user, deliveryAddress: currentAddressList }
+        { ...user, addresses: currentAddressList }
       );
-      return res.status(200).json({
+      return res.status(EStatusCodes.OK).json({
         message: "Add address successfully!",
       });
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(EStatusCodes.BAD_REQUEST).json(error);
     }
   };
 
@@ -126,21 +126,21 @@ export default class UserController extends CrudController {
       const _id = req.query._id;
       const user = req.user as IUser;
 
-      const index = user.deliveryAddress.findIndex((add) => add._id == _id);
+      const index = user.addresses.findIndex((add) => add._id == _id);
       if (index < 0) {
         return res.status(404).json({
           message: "Address not found!",
         });
       }
 
-      user.deliveryAddress.splice(index, 1);
+      user.addresses.splice(index, 1);
 
       await User.findOneAndUpdate({ _id: user._id }, user);
-      return res.status(200).json({
+      return res.status(EStatusCodes.OK).json({
         message: "Delete address successfully!",
       });
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(EStatusCodes.BAD_REQUEST).json(error);
     }
   };
   public query = async (
@@ -148,38 +148,71 @@ export default class UserController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const query = [
+      const requestQueries = req.query;
+      const page = Number(requestQueries.page) || 0;
+      const limit = Number(requestQueries.limit) || 10;
+
+      const query = {
+        $match: {
+          age: {
+            $gt: 20,
+          },
+          // "addresses.address": "Hà Đông",
+        },
+      };
+
+      const counter = await User.aggregate([
+        query,
         {
-          $match: {
-            age: {
-              $gte: 21,
-            },
-            "address.name": "Ha Dong",
+          $count: "count",
+        },
+      ]);
+
+      const response = await User.aggregate([
+        query,
+        {
+          $project: { 
+            name: 1,
+            addresses: 1,
+            age: 1,
           },
         },
+        {
+          $skip: page * limit,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+      return res.status(EStatusCodes.OK).json({
+        total: counter[0].count,
+        userList: response,
+      });
+    } catch (error) {
+      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+    }
+  };
+
+  public queryRole = async (
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>
+  ): Promise<Response<any, Record<string, any>>> => {
+    try {
+      const requestQueries = req.query;
+      const page = Number(requestQueries.page) || 0;
+      const limit = Number(requestQueries.limit) || 10;
+
+      const response = await  User.aggregate([
         {
           $project: {
-            name: 1,
-            age: 1,
-            address: 1,
-          },
-        },
-        {
-          $sort: {
-            age: 1,
-          },
-        },
-      ];
+           
+          }
+        }
+      ])
 
-      const response = await User.find({
-        age: {
-          $gt: 21,
-        },
-      });
-      console.log("response: ", response);
-      return res.status(200).json(response);
+      return res.status(EStatusCodes.OK).json({});
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(EStatusCodes.BAD_REQUEST).json();
     }
   };
 }

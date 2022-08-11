@@ -29,6 +29,8 @@ const permissionMiddleware = {
       return res.status(EStatusCodes.CONFLICT).json({
         message: "The permission already exists",
       });
+    } else {
+      next();
     }
   },
 

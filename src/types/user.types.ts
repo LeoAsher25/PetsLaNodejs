@@ -7,7 +7,8 @@ export interface IUser extends mongoose.Document {
   username: string;
   email: string;
   password: string;
-  deliveryAddress: IAddress[];
+  age: Number;
+  addresses: IAddress[];
   role: string[];
   createdAt?: string;
   updatedAt?: string;
@@ -27,6 +28,7 @@ export enum ERole {
   STAFF = "Staff",
   ADMINISTRATOR = "Administrator",
 }
+
 export interface IRole {
   _id?: string;
   name: ERole;
@@ -56,7 +58,7 @@ export interface IPermission {
 //   email?: string;
 //   username?: string;
 //   password?: string;
-//   deliveryAddress: IAddress[];
+//   address: IAddress[];
 //   createdAt?: string;
 //   updatedAt?: string;
 //   // verifyPassword: (pw: string) => Promise<boolean>;

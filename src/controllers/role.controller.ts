@@ -1,10 +1,10 @@
-import { ERole, IRole } from "src/types/user.types";
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import { CrudController } from "src/controllers/crud.controller";
 import Role from "src/models/Role";
 import { EStatusCodes } from "src/types/status-code.enum";
+import { IRole } from "src/types/user.types";
 
 export default class RoleController extends CrudController {
   public create = async (
@@ -25,7 +25,10 @@ export default class RoleController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const requestData: IRole = req.body;
-      const newRole = await Role.findOneAndUpdate(requestData).lean();
+      const newRole = await Role.findOneAndUpdate(
+        { _id: requestData._id },
+        requestData
+      ).lean();
       return res.status(EStatusCodes.OK).json(newRole);
     } catch (error) {
       return res.status(EStatusCodes.BAD_REQUEST).json(error);
@@ -37,7 +40,9 @@ export default class RoleController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const requestData: IRole = req.body;
-      const deletedRole = await Role.findOneAndDelete(requestData).lean();
+      const deletedRole = await Role.findOneAndDelete({
+        _id: requestData._id,
+      }).lean();
       return res.status(EStatusCodes.OK).json(deletedRole);
     } catch (error) {
       return res.status(EStatusCodes.BAD_REQUEST).json(error);

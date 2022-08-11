@@ -22,3 +22,5 @@ roleRouter.put(
   roleController.create
 );
 roleRouter.delete("/:id", roleMiddleware.checkNotExist, roleController.delete);
+
+export default roleRouter;

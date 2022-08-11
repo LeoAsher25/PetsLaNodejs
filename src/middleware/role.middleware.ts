@@ -42,6 +42,8 @@ const roleMiddleware = {
       return res.status(EStatusCodes.CONFLICT).json({
         message: "The role already exists",
       });
+    } else {
+      next();
     }
   },
 

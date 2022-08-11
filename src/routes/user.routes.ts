@@ -5,9 +5,10 @@ const userRouter = express.Router();
 
 userRouter
   .get("/", userController.getAll)
-  .get("/address", userController.getAllAddress)
-  .post("/address", userController.addAddress)
-  .delete("/address", userController.deleteAddress)
-  .get('/query', userController.query)
+  .get("/addresses", userController.getAllAddress)
+  .post("/addresses", userController.addAddress)
+  .delete("/addresses", userController.deleteAddress)
+  .get("/query", userController.query)
+  .get("/quert-role", userController.queryRole);
 
 export default userRouter;
