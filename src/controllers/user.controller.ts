@@ -157,7 +157,7 @@ export default class UserController extends CrudController {
           age: {
             $gt: 20,
           },
-          // "addresses.address": "Hà Đông",
+          "addresses.address": "Hà Đông",
         },
       };
 
@@ -171,7 +171,7 @@ export default class UserController extends CrudController {
       const response = await User.aggregate([
         query,
         {
-          $project: { 
+          $project: {
             name: 1,
             addresses: 1,
             age: 1,
@@ -202,15 +202,41 @@ export default class UserController extends CrudController {
       const page = Number(requestQueries.page) || 0;
       const limit = Number(requestQueries.limit) || 10;
 
-      const response = await  User.aggregate([
+      const response = await User.aggregate([
         {
-          $project: {
-           
-          }
-        }
-      ])
+          $lookup: {
+            from: "role",
+            localField: "name",
+            foreignField: "name",
+            as: "roleList",
+          },
+        },
+      ]);
 
       return res.status(EStatusCodes.OK).json({});
+    } catch (error) {
+      return res.status(EStatusCodes.BAD_REQUEST).json();
+    }
+  };
+
+  public queryInfo = async (
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>
+  ): Promise<Response<any, Record<string, any>>> => {
+    try {
+      let { page, limit, name, email, age } = req.query;
+      const queryPage = Number(page || 0);
+      const queryLimit = Number(limit || 10);
+      const query = {
+        $match: {
+          age,
+        },
+      };
+      console.log("query: ", query);
+      const response = await User.aggregate([query]);
+      console.log("response0: ", response);
+
+      return res.status(EStatusCodes.OK).json(response);
     } catch (error) {
       return res.status(EStatusCodes.BAD_REQUEST).json();
     }
