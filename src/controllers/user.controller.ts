@@ -157,19 +157,19 @@ export default class UserController extends CrudController {
           age: {
             $gt: 20,
           },
-          "addresses.address": "Hà Đông",
+          // "addresses.address": "Hà Đông",
         },
       };
 
-      const counter = await User.aggregate([
-        query,
-        {
-          $count: "count",
-        },
-      ]);
-
       const response = await User.aggregate([
-        query,
+        {
+          $match: {
+            age: {
+              $gt: 20,
+            },
+            // "addresses.address": "Hà Đông",
+          },
+        },
         {
           $project: {
             name: 1,
@@ -178,16 +178,28 @@ export default class UserController extends CrudController {
           },
         },
         {
-          $skip: page * limit,
-        },
-        {
-          $limit: limit,
+          $facet: {
+            count: [
+              {
+                $count: "totalCount",
+              },
+            ],
+
+            data: [
+              {
+                $skip: page * limit,
+              },
+              {
+                $limit: limit,
+              },
+            ],
+          },
         },
       ]);
-      return res.status(EStatusCodes.OK).json({
-        total: counter[0].count,
-        userList: response,
-      });
+
+      console.log("response: ", response);
+
+      return res.status(EStatusCodes.OK).json(response);
     } catch (error) {
       return res.status(EStatusCodes.BAD_REQUEST).json(error);
     }
@@ -205,16 +217,17 @@ export default class UserController extends CrudController {
       const response = await User.aggregate([
         {
           $lookup: {
-            from: "role",
-            localField: "name",
-            foreignField: "name",
+            from: "roles",
+            localField: "role._id",
+            foreignField: "_id",
             as: "roleList",
           },
         },
       ]);
 
-      return res.status(EStatusCodes.OK).json({});
+      return res.status(EStatusCodes.OK).json(response);
     } catch (error) {
+      console.log("error: ", error);
       return res.status(EStatusCodes.BAD_REQUEST).json();
     }
   };
@@ -229,7 +242,13 @@ export default class UserController extends CrudController {
       const queryLimit = Number(limit || 10);
       const query = {
         $match: {
-          age,
+          age: Number(age),
+          name: {
+            $regex: new RegExp((name as string) || ""),
+          },
+          email: {
+            $regex: new RegExp((email as string) || ""),
+          },
         },
       };
       console.log("query: ", query);

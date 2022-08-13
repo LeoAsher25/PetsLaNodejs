@@ -71,4 +71,24 @@ export default class RoleController extends CrudController {
       return res.status(EStatusCodes.BAD_REQUEST).json(error);
     }
   };
+
+  public assignPermission = async (
+    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    res: Response<any, Record<string, any>>
+  ): Promise<Response<any, Record<string, any>>> => {
+    try {
+      const { roleId, permission } = req.body;
+      // const newRole = await Role.create(requestData);
+      const response = await Role.findOneAndUpdate(
+        { _id: roleId },
+        { permission }
+      );
+
+      console.log("respose: ", response);
+
+      return res.status(EStatusCodes.OK).json({});
+    } catch (error) {
+      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+    }
+  };
 }

@@ -7,7 +7,7 @@ const roleRouter = express.Router();
 roleRouter.post(
   "/",
   roleMiddleware.checkRequired,
-  roleMiddleware.checkValid,
+  // roleMiddleware.checkValid,
   roleMiddleware.checkAlreadyExists,
   roleController.create
 );
@@ -22,5 +22,6 @@ roleRouter.put(
   roleController.create
 );
 roleRouter.delete("/:id", roleMiddleware.checkNotExist, roleController.delete);
+roleRouter.post("/assign-permission", roleController.assignPermission);
 
 export default roleRouter;

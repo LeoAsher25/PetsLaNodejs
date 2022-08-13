@@ -8,7 +8,7 @@ const permissionRouter = express.Router();
 permissionRouter.post(
   "/",
   permissionMiddleware.checkRequired,
-  permissionMiddleware.checkValid,
+  // permissionMiddleware.checkValid,
   permissionMiddleware.checkAlreadyExists,
   permissionController.create
 );
