@@ -84,8 +84,6 @@ export default class RoleController extends CrudController {
         { permission }
       );
 
-      console.log("respose: ", response);
-
       return res.status(EStatusCodes.OK).json({});
     } catch (error) {
       return res.status(EStatusCodes.BAD_REQUEST).json(error);

@@ -197,8 +197,6 @@ export default class UserController extends CrudController {
         },
       ]);
 
-      console.log("response: ", response);
-
       return res.status(EStatusCodes.OK).json(response);
     } catch (error) {
       return res.status(EStatusCodes.BAD_REQUEST).json(error);
@@ -251,9 +249,7 @@ export default class UserController extends CrudController {
           },
         },
       };
-      console.log("query: ", query);
       const response = await User.aggregate([query]);
-      console.log("response0: ", response);
 
       return res.status(EStatusCodes.OK).json(response);
     } catch (error) {
