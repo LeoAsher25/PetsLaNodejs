@@ -221,6 +221,16 @@ export default class UserController extends CrudController {
             as: "roleList",
           },
         },
+        {
+          $project: {
+            role: 0,
+          },
+        },
+        {
+          $addFields: {
+            "permission": "$roleList.permission",
+          },
+        },
       ]);
 
       return res.status(EStatusCodes.OK).json(response);
@@ -241,16 +251,15 @@ export default class UserController extends CrudController {
       const query = {
         $match: {
           age: Number(age),
-          name: {
-            $regex: new RegExp((name as string) || ""),
+          firstName: {
+            $regex: new RegExp((name as string) || /\s*/g),
           },
           email: {
-            $regex: new RegExp((email as string) || ""),
+            $regex: new RegExp((email as string) || /\s*/),
           },
         },
       };
       const response = await User.aggregate([query]);
-
       return res.status(EStatusCodes.OK).json(response);
     } catch (error) {
       return res.status(EStatusCodes.BAD_REQUEST).json();
