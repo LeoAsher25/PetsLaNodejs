@@ -15,6 +15,11 @@ export interface IUser extends mongoose.Document {
   verifyPassword?: (pw: string) => Promise<boolean>;
 }
 
+export type ISignUpData = Pick<
+  IUser,
+  "firstName" | "lastName" | "email" | "password" | "username"
+>;
+
 export interface IAddress {
   _id: string;
   phoneNumber: string;

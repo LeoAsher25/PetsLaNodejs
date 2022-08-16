@@ -1,0 +1,55 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  firstName String
+  lastName  String
+  username  String
+  email     String    @unique
+  password  String
+  age       Int?
+  addresses Address[]
+  Role      Role[]    @relation(fields: [roleId], references: [id])
+  roleId    String[]  @db.ObjectId
+}
+
+model Address {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  recipient   String
+  address     String
+  phoneNumber String
+  User        User?   @relation(fields: [userId], references: [id])
+  userId      String? @db.ObjectId
+}
+
+model Role {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  userId       String[]     @db.ObjectId
+  User         User[]       @relation(fields: [userId], references: [id])
+  Permission   Permission[] @relation(fields: [permissionId], references: [id])
+  permissionId String[]     @db.ObjectId
+}
+
+model Permission {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  roleId      String[] @db.ObjectId
+  Role        Role[]   @relation(fields: [roleId], references: [id])
+}
+
+model UserToken {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String   @db.ObjectId
+  token    String
+  expireAt DateTime
+}

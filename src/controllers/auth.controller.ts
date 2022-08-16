@@ -1,8 +1,10 @@
+import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import JWT from "jsonwebtoken";
 import mongoose from "mongoose";
 import { ParsedQs } from "qs";
+import prisma from "src/config/prisma/prisma.config";
 import User from "src/models/User";
 import UserToken from "src/models/UserToken";
 import { IUser } from "src/types/user.types";
@@ -61,55 +63,20 @@ export default class AuthController {
   ): Promise<Response<any, Record<string, any>>> => {
     const postData: IUser = req.body;
     try {
-      if (
-        !postData.firstName &&
-        !postData.lastName &&
-        !postData.email &&
-        !postData.username &&
-        !postData.password
-      ) {
-        return res.status(400).json({
-          message: "Fill in all required entry fields!",
-        });
-      } else if (!postData.firstName) {
-        return res.status(400).json({
-          message: "First name is required!",
-        });
-      } else if (!postData.lastName) {
-        return res.status(400).json({
-          message: "Last name is required!",
-        });
-      } else if (!postData.email) {
-        return res.status(400).json({
-          message: "Email is required!",
-        });
-      } else if (!postData.username) {
-        return res.status(400).json({
-          message: "Username is required!",
-        });
-      } else if (!postData.password) {
-        return res.status(400).json({
-          message: "Password is required!",
-        });
-      }
-
-      const foundUserByEmail = await User.findOne({ email: postData.email });
-      if (foundUserByEmail) {
-        return res
-          .status(400)
-          .json({ error: { message: "Email is already in use." } });
-      }
-
-      const foundUserByUsername = await User.findOne({
+      let user: Prisma.UserCreateInput = {
+        firstName: postData.firstName,
+        lastName: postData.lastName,
         username: postData.username,
-      });
-      if (foundUserByUsername) {
-        return res
-          .status(400)
-          .json({ error: { message: "Username is already in use." } });
-      }
+        email: postData.email,
+        password: postData.password,
+      };
 
-      const newUser = await User.create(postData);
+      const newUser = await prisma.user.create({
+        data: user,
+      });
+      console.log("newUser: ", newUser);
+
+      // const newUser = await User.create(postData);
       return res.status(200).json({
         message: "Create new user successfully!",
         user: newUser,
@@ -126,6 +93,7 @@ export default class AuthController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     const { username } = req.body;
+
     const foundUser = await User.findOne({ username });
     if (!foundUser) {
       return res.status(400).json({

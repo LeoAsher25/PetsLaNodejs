@@ -1,11 +1,16 @@
 import express from "express";
 import passport from "passport";
 import { authController } from "src/controllers";
+import authMiddleware from "src/middleware/auth.middleware";
 import "src/middleware/passport";
 
 const authRouter = express.Router();
 
-authRouter.post("/signup", authController.handleSignup);
+authRouter.post(
+  "/signup",
+  authMiddleware.checkSignUp,
+  authController.handleSignup
+);
 authRouter.post("/refresh-token", authController.handleRefreshToken);
 authRouter.post(
   "/login",
