@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import Permission from "src/models/Permission";
-import { EStatusCodes } from "src/types/status-code.enum";
+import { StatusCodes } from "src/types/status-code.enum";
 import { EPermission, IPermission } from "src/types/user.types";
 
 const permissionMiddleware = {
   checkRequired: async (req: Request, res: Response, next: NextFunction) => {
     const requestData: IPermission = req.body;
     if (!requestData.name) {
-      return res.status(EStatusCodes.BAD_REQUEST).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: "The permission name is required",
       });
     } else {
@@ -26,7 +26,7 @@ const permissionMiddleware = {
     }).lean();
 
     if (permission) {
-      return res.status(EStatusCodes.CONFLICT).json({
+      return res.status(StatusCodes.CONFLICT).json({
         message: "The permission already exists",
       });
     } else {
@@ -41,7 +41,7 @@ const permissionMiddleware = {
     }).lean();
 
     if (!permission) {
-      return res.status(EStatusCodes.NOT_FOUND).json({
+      return res.status(StatusCodes.NOT_FOUND).json({
         message: "The permission doesn't exists",
       });
     } else {
@@ -56,7 +56,7 @@ const permissionMiddleware = {
         (permission: string) => permission != requestData.name
       )
     ) {
-      return res.status(EStatusCodes.BAD_REQUEST).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: "The permission name is invalid",
       });
     } else {

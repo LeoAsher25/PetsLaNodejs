@@ -3,7 +3,7 @@ import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import { CrudController } from "src/controllers/crud.controller";
 import Role from "src/models/Role";
-import { EStatusCodes } from "src/types/status-code.enum";
+import { StatusCodes } from "src/types/status-code.enum";
 import { IRole } from "src/types/user.types";
 
 export default class RoleController extends CrudController {
@@ -14,9 +14,9 @@ export default class RoleController extends CrudController {
     try {
       const requestData: IRole = req.body;
       const newRole = await Role.create(requestData);
-      return res.status(EStatusCodes.OK).json(newRole);
+      return res.status(StatusCodes.OK).json(newRole);
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
   public update = async (
@@ -29,9 +29,9 @@ export default class RoleController extends CrudController {
         { _id: requestData._id },
         requestData
       ).lean();
-      return res.status(EStatusCodes.OK).json(newRole);
+      return res.status(StatusCodes.OK).json(newRole);
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
   public delete = async (
@@ -43,9 +43,9 @@ export default class RoleController extends CrudController {
       const deletedRole = await Role.findOneAndDelete({
         _id: requestData._id,
       }).lean();
-      return res.status(EStatusCodes.OK).json(deletedRole);
+      return res.status(StatusCodes.OK).json(deletedRole);
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
   public getAll = async (
@@ -54,9 +54,9 @@ export default class RoleController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const roles = await Role.find().lean();
-      return res.status(EStatusCodes.OK).json(roles);
+      return res.status(StatusCodes.OK).json(roles);
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
   public getOne = async (
@@ -66,9 +66,9 @@ export default class RoleController extends CrudController {
     try {
       const requestData: IRole = req.body;
       const role = await Role.findOne({ _id: requestData._id }).lean();
-      return res.status(EStatusCodes.OK).json(role);
+      return res.status(StatusCodes.OK).json(role);
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
 
@@ -84,9 +84,9 @@ export default class RoleController extends CrudController {
         { permission }
       );
 
-      return res.status(EStatusCodes.OK).json({});
+      return res.status(StatusCodes.OK).json({});
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
 }

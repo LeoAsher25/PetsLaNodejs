@@ -5,8 +5,7 @@ import JWT from "jsonwebtoken";
 import mongoose from "mongoose";
 import { ParsedQs } from "qs";
 import prisma from "src/config/prisma/prisma.config";
-import User from "src/models/User";
-import UserToken from "src/models/UserToken";
+// import UserToken from "src/models/UserToken";
 import { IUser } from "src/types/user.types";
 
 enum ETokenType {
@@ -74,7 +73,6 @@ export default class AuthController {
       const newUser = await prisma.user.create({
         data: user,
       });
-      console.log("newUser: ", newUser);
 
       // const newUser = await User.create(postData);
       return res.status(200).json({
@@ -94,7 +92,12 @@ export default class AuthController {
   ): Promise<Response<any, Record<string, any>>> => {
     const { username } = req.body;
 
-    const foundUser = await User.findOne({ username });
+    // const foundUser = await User.findOne({ username });
+    const foundUser = await prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
     if (!foundUser) {
       return res.status(400).json({
         error: {
@@ -104,7 +107,7 @@ export default class AuthController {
     }
 
     const accessToken: string = this.encodedToken(
-      foundUser._id,
+      foundUser.id,
       foundUser.username,
       ETokenType.ACCESS_TOKEN
     );
@@ -113,18 +116,28 @@ export default class AuthController {
       accessToken,
     };
 
-    const userToken = await UserToken.findOne({ userId: foundUser._id });
+    // const userToken = await UserToken.findOne({ userId: foundUser.id });
+    const userToken = await prisma.userToken.findFirst({
+      where: {
+        userId: foundUser.id,
+      },
+    });
     if (userToken) {
       jsonResponse["refreshToken"] = userToken.token as string;
     } else {
       const refreshToken: string = this.encodedToken(
-        foundUser._id,
+        foundUser.id,
         foundUser.username,
         ETokenType.REFRESH_TOKEN
       );
-      await UserToken.create({
-        userId: foundUser._id,
-        token: refreshToken,
+      await prisma.userToken.create({
+        data: {
+          userId: foundUser.id,
+          token: refreshToken,
+          expireAt: new Date(
+            Date.now() + Number(process.env.REFRESH_TOKEN_LIFE)
+          ),
+        },
       });
 
       jsonResponse["refreshToken"] = refreshToken;
@@ -144,7 +157,9 @@ export default class AuthController {
           message: "No refresh token supplied!",
         });
       }
-      const foundToken = await UserToken.findOne({ token: refreshToken });
+      const foundToken = await prisma.userToken.findFirst({
+        where: { token: refreshToken },
+      });
       if (!foundToken) {
         res.status(400).json({
           message: "Invalid refresh token!",

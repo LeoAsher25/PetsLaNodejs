@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "src/config/prisma/prisma.config";
-import { EStatusCodes } from "src/types/status-code.enum";
+import { StatusCodes } from "src/types/status-code.enum";
 import { ISignUpData } from "src/types/user.types";
 
 const authMiddleware = {
   checkSignUp: async (req: Request, res: Response, next: NextFunction) => {
     const requestData: ISignUpData = req.body;
+    console.log("requestData: ", requestData);
     if (
       !requestData.firstName ||
       !requestData.lastName ||
@@ -13,7 +14,7 @@ const authMiddleware = {
       !requestData.username ||
       !requestData.password
     ) {
-      return res.status(EStatusCodes.BAD_REQUEST).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: "Fill in required entry fields!",
       });
     }
@@ -25,7 +26,7 @@ const authMiddleware = {
     });
 
     if (foundUserByEmail) {
-      return res.status(EStatusCodes.CONFLICT).json({
+      return res.status(StatusCodes.CONFLICT).json({
         message: "Email is already in use.",
       });
     }
@@ -37,12 +38,10 @@ const authMiddleware = {
     });
 
     if (foundUserByUsername) {
-      return res.status(EStatusCodes.CONFLICT).json({
+      return res.status(StatusCodes.CONFLICT).json({
         message: "Username is already in use.",
       });
     }
-
-    console.log("test: ", foundUserByUsername);
 
     next();
   },
