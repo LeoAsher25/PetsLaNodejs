@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
+import prisma from "src/config/prisma/prisma.config";
 import { CrudController } from "src/controllers/crud.controller";
 import Role from "src/models/Role";
+import roleService from "src/services/role.service";
 import { StatusCodes } from "src/types/status-code.enum";
-import { IRole } from "src/types/user.types";
+import { PermissionInterface, RoleInterface } from "src/types/user.type";
 
 export default class RoleController extends CrudController {
   public create = async (
@@ -12,8 +14,10 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const requestData: IRole = req.body;
-      const newRole = await Role.create(requestData);
+      const requestData: RoleInterface = req.body;
+      const newRole = await prisma.role.create({
+        data: requestData,
+      });
       return res.status(StatusCodes.OK).json(newRole);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
@@ -24,11 +28,11 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const requestData: IRole = req.body;
-      const newRole = await Role.findOneAndUpdate(
-        { _id: requestData._id },
-        requestData
-      ).lean();
+      const requestData: RoleInterface = req.body;
+      const newRole = await prisma.role.update({
+        where: { id: requestData._id },
+        data: requestData,
+      });
       return res.status(StatusCodes.OK).json(newRole);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
@@ -39,11 +43,14 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const requestData: IRole = req.body;
-      const deletedRole = await Role.findOneAndDelete({
-        _id: requestData._id,
-      }).lean();
-      return res.status(StatusCodes.OK).json(deletedRole);
+      const id: string = req.params.id;
+      await prisma.role.delete({
+        where: { id },
+      });
+
+      return res
+        .status(StatusCodes.OK)
+        .json({ message: "Delete role successfully" });
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
@@ -53,7 +60,7 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const roles = await Role.find().lean();
+      const roles = await prisma.role.findMany();
       return res.status(StatusCodes.OK).json(roles);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
@@ -64,27 +71,27 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const requestData: IRole = req.body;
-      const role = await Role.findOne({ _id: requestData._id }).lean();
+      const requestData: RoleInterface = req.body;
+      const role = await prisma.role.findFirst({
+        where: { id: requestData._id },
+      });
+
       return res.status(StatusCodes.OK).json(role);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
 
-  public assignPermission = async (
+  public addPermission = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const { roleId, permission } = req.body;
-      // const newRole = await Role.create(requestData);
-      const response = await Role.findOneAndUpdate(
-        { _id: roleId },
-        { permission }
-      );
+      const { role, permission } = res.locals;
 
-      return res.status(StatusCodes.OK).json({});
+      const response = await roleService.addPermission(role, permission);
+
+      return res.status(StatusCodes.OK).json(response);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
     }

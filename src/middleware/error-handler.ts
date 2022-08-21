@@ -2,11 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "src/types/status-code.enum";
 
 const errorHandler = (
-  err: Error,
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(err);
+  console.log("error handler", err);
+  return res.status(res.statusCode).json({ error: err.message });
 };
 export default errorHandler;

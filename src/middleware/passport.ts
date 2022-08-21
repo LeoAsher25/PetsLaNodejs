@@ -34,21 +34,18 @@ passport.use(
   new PassportLocal.Strategy(async function (username, password, done) {
     try {
       const foundUser = await prisma.user.findFirst({
-        where: { username },
+        where: {
+          username,
+        },
       });
 
-      if (!foundUser) {
-        return done(null, true);
-      } 
-
-      if (foundUser.password !== password) {
-        return done(null, true);
+      if (!foundUser || foundUser.password !== password) {
+        return done(null, false);
       }
       // const isCorrectPassword = await foundUser.verifyPassword!(password);
       // if (!isCorrectPassword) {
       //   return done(null, true);
       // }
-
       return done(null, foundUser);
     } catch (error) {
       done(error as CallbackError, false);

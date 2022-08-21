@@ -17,11 +17,15 @@ roleRouter.put(
   "/:id",
   roleMiddleware.checkRequired,
   roleMiddleware.checkNotExist,
-  roleMiddleware.checkValid,
+  // roleMiddleware.checkValid,
   roleMiddleware.checkAlreadyExists,
   roleController.create
 );
 roleRouter.delete("/:id", roleMiddleware.checkNotExist, roleController.delete);
-roleRouter.post("/assign-permission", roleController.assignPermission);
+roleRouter.post(
+  "/add-permission",
+  roleMiddleware.addPermission,
+  roleController.addPermission
+);
 
 export default roleRouter;

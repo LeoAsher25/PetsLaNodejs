@@ -6,7 +6,7 @@ import { ParsedQs } from "qs";
 import prisma from "src/config/prisma/prisma.config";
 import { CrudController } from "src/controllers/crud.controller";
 import { StatusCodes } from "src/types/status-code.enum";
-import { IAddress, IUser } from "src/types/user.types";
+import { IAddress, UserInterface } from "src/types/user.type";
 
 export default class UserController extends CrudController {
   public getAll = async (
@@ -88,7 +88,7 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     const user = req.user!;
     try {
-      return res.status(StatusCodes.OK).json((user as IUser).addresses);
+      return res.status(StatusCodes.OK).json((user as UserInterface).addresses);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
@@ -100,7 +100,7 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const requestData = req.body;
-      const user = req.user as IUser;
+      const user = req.user as UserInterface;
       const currentAddressList: IAddress[] = user.addresses;
       currentAddressList.unshift({
         ...requestData,
@@ -140,7 +140,7 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const _id = req.query._id;
-      const user = req.user as IUser;
+      const user = req.user as UserInterface;
 
       const index = user.addresses.findIndex((add) => add._id == _id);
       if (index < 0) {

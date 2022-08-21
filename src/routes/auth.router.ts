@@ -11,7 +11,11 @@ authRouter.post(
   authMiddleware.checkSignUp,
   authController.handleSignup
 );
-authRouter.post("/refresh-token", authController.handleRefreshToken);
+authRouter.post(
+  "/refresh-token",
+  authMiddleware.checkRefeshToken,
+  authController.handleRefreshToken
+);
 authRouter.post(
   "/login",
   passport.authenticate("local", { session: false }),

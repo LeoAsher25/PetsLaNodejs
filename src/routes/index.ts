@@ -6,15 +6,15 @@ import orderRouter from "src/routes/order.router";
 import permissionRouter from "src/routes/permission.router";
 import roleRouter from "src/routes/role.router";
 import productRouter from "src/routes/product.router";
-import userRouter from "src/routes/user.routes";
+import userRouter from "src/routes/user.router";
 
 // protectedRouter:
 const protectedRouter = Router();
 protectedRouter
-  .use("/order", orderRouter)
-  .use("/user", userRouter)
-  .use("/permission", permissionRouter)
-  .use("/role", roleRouter);
+  .use("/orders", orderRouter)
+  .use("/users", userRouter)
+  .use("/permissions", permissionRouter)
+  .use("/roles", roleRouter);
 
 // mainRouter
 export const mainRouter = Router();

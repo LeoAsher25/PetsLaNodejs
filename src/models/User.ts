@@ -3,9 +3,9 @@
 // import { AddressSchema } from "./Address";
 // import bcrypt from "bcryptjs";
 
-// import { IUser } from "src/types/user.types";
+// import { UserInterface } from "src/types/user.type";
 
-// export const UserSchema = new Schema<IUser>(
+// export const UserSchema = new Schema<UserInterface>(
 //   {
 //     firstName: { type: String },
 //     lastName: { type: String },
@@ -59,7 +59,7 @@
 //   }
 // };
 
-// UserSchema.pre<IUser>("save", async function (next) {
+// UserSchema.pre<UserInterface>("save", async function (next) {
 //   try {
 //     // generate a salt
 //     const salt = await bcrypt.genSalt(10);

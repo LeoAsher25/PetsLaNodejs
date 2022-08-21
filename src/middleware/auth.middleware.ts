@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import prisma from "src/config/prisma/prisma.config";
 import { StatusCodes } from "src/types/status-code.enum";
-import { ISignUpData } from "src/types/user.types";
+import { ISignUpData } from "src/types/user.type";
 
 const authMiddleware = {
-  checkSignUp: async (req: Request, res: Response, next: NextFunction) => {
+  async checkSignUp(req: Request, res: Response, next: NextFunction) {
     const requestData: ISignUpData = req.body;
-    console.log("requestData: ", requestData);
     if (
       !requestData.firstName ||
       !requestData.lastName ||
@@ -43,6 +42,25 @@ const authMiddleware = {
       });
     }
 
+    next();
+  },
+  async checkRefeshToken(req: Request, res: Response, next: NextFunction) {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        message: "No refresh token supplied!",
+      });
+    }
+
+    const foundToken = await prisma.userToken.findFirst({
+      where: { token: refreshToken },
+    });
+    if (!foundToken) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: "Invalid refresh token!",
+      });
+    }
+    res.locals.refreshToken = refreshToken;
     next();
   },
 };
