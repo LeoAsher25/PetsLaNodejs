@@ -28,7 +28,7 @@ permissionRouter.put(
   "/:id",
   permissionMiddleware.checkRequired,
   permissionMiddleware.checkNotExist,
-  permissionMiddleware.checkValid,
+  // permissionMiddleware.checkValid,
   permissionMiddleware.checkAlreadyExists,
   permissionController.update
 );

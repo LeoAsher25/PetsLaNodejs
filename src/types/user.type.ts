@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface IUser extends mongoose.Document {
+export interface UserInterface extends mongoose.Document {
   _id?: string;
   firstName: string;
   lastName: string;
@@ -14,6 +14,11 @@ export interface IUser extends mongoose.Document {
   updatedAt?: string;
   verifyPassword?: (pw: string) => Promise<boolean>;
 }
+
+export type ISignUpData = Pick<
+  UserInterface,
+  "firstName" | "lastName" | "email" | "password" | "username"
+>;
 
 export interface IAddress {
   _id: string;
@@ -29,7 +34,7 @@ export enum ERole {
   ADMINISTRATOR = "Administrator",
 }
 
-export interface IRole {
+export interface RoleInterface {
   _id?: string;
   name: ERole;
   description: string;
@@ -44,22 +49,15 @@ export enum EPermission {
   MANAGE_USERS = "Manage users",
 }
 
-export interface IPermission {
+export interface PermissionInterface {
   _id?: string;
   name: EPermission;
   description: string;
   createdAt: Date;
   updatedAt: Date;
 }
-// export interface IUser {
-//   _id?: string;
-//   firstName: string;
-//   lastName: string;
-//   email?: string;
-//   username?: string;
-//   password?: string;
-//   address: IAddress[];
-//   createdAt?: string;
-//   updatedAt?: string;
-//   // verifyPassword: (pw: string) => Promise<boolean>;
-// }
+
+export declare type PermissionType = {
+  id: string;
+  name: string;
+};

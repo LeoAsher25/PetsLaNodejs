@@ -1,11 +1,12 @@
+import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import mongoose from "mongoose";
 import { ParsedQs } from "qs";
+import prisma from "src/config/prisma/prisma.config";
 import { CrudController } from "src/controllers/crud.controller";
-import User from "src/models/User";
-import { EStatusCodes } from "src/types/status-code.enum";
-import { IAddress, IUser } from "src/types/user.types";
+import { StatusCodes } from "src/types/status-code.enum";
+import { IAddress, UserInterface } from "src/types/user.type";
 
 export default class UserController extends CrudController {
   public getAll = async (
@@ -13,11 +14,10 @@ export default class UserController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const query = req.query;
-
-      return res.status(EStatusCodes.OK).json();
+      const query = req.query; 
+      return res.status(StatusCodes.OK).json({ message: "oke" });
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
   public getOne = async (
@@ -25,9 +25,9 @@ export default class UserController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      return res.status(EStatusCodes.OK).json(req.user);
+      return res.status(StatusCodes.OK).json(req.user);
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
   public create = async (
@@ -48,12 +48,12 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     const requestData = req.body;
     try {
-      const updatedData = await User.findOneAndUpdate(
-        {
-          _id: requestData._id,
+      const updatedData = await prisma.user.update({
+        where: {
+          id: requestData._id,
         },
-        requestData
-      );
+        data: requestData,
+      });
 
       if (!updatedData) {
         return res.status(404).json({
@@ -61,7 +61,7 @@ export default class UserController extends CrudController {
         });
       }
 
-      return res.status(EStatusCodes.OK).json({
+      return res.status(StatusCodes.OK).json({
         user: updatedData,
       });
     } catch (error) {
@@ -71,7 +71,7 @@ export default class UserController extends CrudController {
           message: "User _id not found!",
         });
       }
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
 
@@ -88,9 +88,9 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     const user = req.user!;
     try {
-      return res.status(EStatusCodes.OK).json((user as IUser).addresses);
+      return res.status(StatusCodes.OK).json((user as UserInterface).addresses);
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
 
@@ -100,21 +100,37 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const requestData = req.body;
-      const user = req.user as IUser;
+      const user = req.user as UserInterface;
       const currentAddressList: IAddress[] = user.addresses;
       currentAddressList.unshift({
         ...requestData,
       });
 
-      await User.findOneAndUpdate(
-        { _id: user._id },
-        { ...user, addresses: currentAddressList }
-      );
-      return res.status(EStatusCodes.OK).json({
+      // await User.findOneAndUpdate(
+      //   { _id: user._id },
+      //   { ...user, addresses: currentAddressList }
+      // ); 
+
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user._id,
+        },
+        data: {
+          addresses: {
+            create: {
+              recipient: requestData.recipient,
+              address: requestData.address,
+              phoneNumber: requestData.phoneNumber,
+            },
+          },
+        },
+      });
+
+      return res.status(StatusCodes.OK).json({
         message: "Add address successfully!",
       });
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
 
@@ -124,7 +140,7 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const _id = req.query._id;
-      const user = req.user as IUser;
+      const user = req.user as UserInterface;
 
       const index = user.addresses.findIndex((add) => add._id == _id);
       if (index < 0) {
@@ -135,125 +151,18 @@ export default class UserController extends CrudController {
 
       user.addresses.splice(index, 1);
 
-      await User.findOneAndUpdate({ _id: user._id }, user);
-      return res.status(EStatusCodes.OK).json({
+      // await User.findOneAndUpdate({ _id: user._id }, user);
+      await prisma.user.update({
+        where: {
+          id: user._id,
+        },
+        data: user as Prisma.UserUpdateInput,
+      });
+      return res.status(StatusCodes.OK).json({
         message: "Delete address successfully!",
       });
     } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
-    }
-  };
-  public query = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
-    try {
-      const requestQueries = req.query;
-      const page = Number(requestQueries.page) || 0;
-      const limit = Number(requestQueries.limit) || 10;
-
-      const query = {
-        $match: {
-          age: {
-            $gt: 20,
-          },
-          // "addresses.address": "Hà Đông",
-        },
-      };
-
-      const response = await User.aggregate([
-        {
-          $match: {
-            age: {
-              $gt: 20,
-            },
-            // "addresses.address": "Hà Đông",
-          },
-        },
-        {
-          $project: {
-            name: 1,
-            addresses: 1,
-            age: 1,
-          },
-        },
-        {
-          $facet: {
-            count: [
-              {
-                $count: "totalCount",
-              },
-            ],
-
-            data: [
-              {
-                $skip: page * limit,
-              },
-              {
-                $limit: limit,
-              },
-            ],
-          },
-        },
-      ]);
-
-      return res.status(EStatusCodes.OK).json(response);
-    } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json(error);
-    }
-  };
-
-  public queryRole = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
-    try {
-      const requestQueries = req.query;
-      const page = Number(requestQueries.page) || 0;
-      const limit = Number(requestQueries.limit) || 10;
-
-      const response = await User.aggregate([
-        {
-          $lookup: {
-            from: "roles",
-            localField: "role._id",
-            foreignField: "_id",
-            as: "roleList",
-          },
-        },
-      ]);
-
-      return res.status(EStatusCodes.OK).json(response);
-    } catch (error) {
-      console.log("error: ", error);
-      return res.status(EStatusCodes.BAD_REQUEST).json();
-    }
-  };
-
-  public queryInfo = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
-    try {
-      let { page, limit, name, email, age } = req.query;
-      const queryPage = Number(page || 0);
-      const queryLimit = Number(limit || 10);
-      const query = {
-        $match: {
-          age: Number(age),
-          name: {
-            $regex: new RegExp((name as string) || ""),
-          },
-          email: {
-            $regex: new RegExp((email as string) || ""),
-          },
-        },
-      };
-      const response = await User.aggregate([query]);
-
-      return res.status(EStatusCodes.OK).json(response);
-    } catch (error) {
-      return res.status(EStatusCodes.BAD_REQUEST).json();
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
 }

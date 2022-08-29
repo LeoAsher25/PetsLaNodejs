@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { IRole } from "src/types/user.types";
-export const RoleSchema = new mongoose.Schema<IRole>(
+import { RoleInterface } from "src/types/user.type";
+export const RoleSchema = new mongoose.Schema<RoleInterface>(
   {
     name: {
       type: String,

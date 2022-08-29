@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { UserSchema } from "./User";
 
 const OrderItemSchema = new Schema({
   title: String,

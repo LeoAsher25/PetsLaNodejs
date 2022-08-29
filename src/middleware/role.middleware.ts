@@ -1,13 +1,14 @@
+import { Permission, Role } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
-import Role from "src/models/Role";
-import { EStatusCodes } from "src/types/status-code.enum";
-import { ERole, IRole } from "src/types/user.types";
+import prisma from "src/config/prisma/prisma.config";
+import { StatusCodes } from "src/types/status-code.enum";
+import { ERole, RoleInterface } from "src/types/user.type";
 
 const roleMiddleware = {
   checkRequired: async (req: Request, res: Response, next: NextFunction) => {
-    const requestData: IRole = req.body;
+    const requestData: RoleInterface = req.body;
     if (!requestData.name) {
-      return res.status(EStatusCodes.BAD_REQUEST).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
         message: "The role name is required",
       });
     } else {
@@ -15,31 +16,33 @@ const roleMiddleware = {
     }
   },
 
-  checkValid: async (req: Request, res: Response, next: NextFunction) => {
-    const requestData: IRole = req.body;
-    if (
-      Object.values(ERole).every((role: string) => role != requestData.name)
-    ) {
-      return res.status(EStatusCodes.BAD_REQUEST).json({
-        message: "The role name is invalid",
-      });
-    } else {
-      next();
-    }
-  },
+  // checkValid: async (req: Request, res: Response, next: NextFunction) => {
+  //   const requestData: RoleInterface = req.body;
+  //   if (
+  //     Object.values(ERole).every((role: string) => role != requestData.name)
+  //   ) {
+  //     return res.status(StatusCodes.BAD_REQUEST).json({
+  //       message: "The role name is invalid",
+  //     });
+  //   } else {
+  //     next();
+  //   }
+  // },
 
   checkAlreadyExists: async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
-    const requestData: IRole = req.body;
-    const role = await Role.findOne({
-      name: requestData.name,
-    }).lean();
+    const requestData: RoleInterface = req.body;
+    const role = await prisma.role.findFirst({
+      where: {
+        name: requestData.name,
+      },
+    });
 
     if (role) {
-      return res.status(EStatusCodes.CONFLICT).json({
+      return res.status(StatusCodes.CONFLICT).json({
         message: "The role already exists",
       });
     } else {
@@ -48,17 +51,97 @@ const roleMiddleware = {
   },
 
   checkNotExist: async (req: Request, res: Response, next: NextFunction) => {
-    const requestData: IRole | string = req.body; // req body may be
-    const role = await Role.findOne({
-      _id: (requestData as IRole)._id || (requestData as string),
-    }).lean();
+    const requestData: RoleInterface | string = req.body; // req body may be
+    const role = await prisma.role.findFirst({
+      where: {
+        id: (requestData as RoleInterface)._id || (requestData as string),
+      },
+    });
 
     if (!role) {
-      return res.status(EStatusCodes.NOT_FOUND).json({
+      return res.status(StatusCodes.NOT_FOUND).json({
         message: "The role doesn't exists",
       });
     } else {
       next();
+    }
+  },
+
+  async addPermission(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { roleId, permissionId } = req.body;
+      const role: Role | null = await prisma.role.findFirst({
+        where: {
+          id: roleId,
+        },
+      });
+      if (!role) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          message: "The role doesn't exists",
+        });
+      }
+
+      const permission: Permission | null = await prisma.permission.findFirst({
+        where: {
+          id: permissionId,
+        },
+      });
+      if (!permission) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          message: "The permission doesn't exists",
+        });
+      }
+
+      if (role.permissions.includes(permissionId)) {
+        return res.status(StatusCodes.CONFLICT).json({
+          message: "The role already has the permission",
+        });
+      }
+      res.locals.role = role;
+      res.locals.permission = permission;
+
+      next();
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  async removePermission(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { roleId, permissionId } = req.body;
+      const role: Role | null = await prisma.role.findFirst({
+        where: {
+          id: roleId,
+        },
+      });
+      if (!role) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          message: "The role doesn't exists",
+        });
+      }
+
+      const permission: Permission | null = await prisma.permission.findFirst({
+        where: {
+          id: permissionId,
+        },
+      });
+      if (!permission) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          message: "The permission doesn't exists",
+        });
+      }
+
+      if (role.permissions.includes(permissionId)) {
+        return res.status(StatusCodes.CONFLICT).json({
+          message: "The role already has the permission",
+        });
+      }
+      res.locals.role = role;
+      res.locals.permission = permission;
+
+      next();
+    } catch (err) {
+      throw err;
     }
   },
 };

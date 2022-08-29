@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { IPermission } from "src/types/user.types";
-export const PermissionSchema = new mongoose.Schema<IPermission>(
+import { PermissionInterface } from "src/types/user.type";
+export const PermissionSchema = new mongoose.Schema<PermissionInterface>(
   {
     name: {
       type: String,
