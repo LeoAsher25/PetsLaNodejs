@@ -1,7 +1,7 @@
 // import { UserSchema } from "src/models/User";
 // import bcrypt from "bcryptjs";
 // import { CallbackError } from "mongoose";
-// import { UserInterface } from "src/types/user.type";
+// import { UserDto } from "src/types/user.type";
 
 // UserSchema.methods.verifyPassword = async function (newPassword: string) {
 //   try {
@@ -12,7 +12,7 @@
 //   }
 // };
 
-// UserSchema.pre<UserInterface>("save", async function (next) {
+// UserSchema.pre<UserDto>("save", async function (next) {
 //   try {
 //     // generate a salt
 //     const salt = await bcrypt.genSalt(10);

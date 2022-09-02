@@ -6,7 +6,7 @@ import { CrudController } from "src/controllers/crud.controller";
 import Role from "src/models/Role";
 import roleService from "src/services/role.service";
 import { StatusCodes } from "src/types/status-code.enum";
-import { PermissionInterface, RoleInterface } from "src/types/user.type";
+import { PermissionDto, RoleDto } from "src/types/user.type";
 
 export default class RoleController extends CrudController {
   public create = async (
@@ -14,10 +14,11 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const requestData: RoleInterface = req.body;
-      const newRole = await prisma.role.create({
-        data: requestData,
-      });
+      const requestData: RoleDto = req.body;
+      // const newRole = await prisma.role.create({
+      //   data: requestData,
+      // });
+      const newRole = await Role.create(requestData);
       return res.status(StatusCodes.OK).json(newRole);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
@@ -28,10 +29,14 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const requestData: RoleInterface = req.body;
-      const newRole = await prisma.role.update({
-        where: { id: requestData._id },
-        data: requestData,
+      const requestData: RoleDto = req.body;
+      // const newRole = await prisma.role.update({
+      //   where: { id: requestData._id },
+      //   data: requestData,
+      // });
+      const id = req.params.id;
+      const newRole = await Role.findOneAndUpdate({
+        _id: id,
       });
       return res.status(StatusCodes.OK).json(newRole);
     } catch (error) {
@@ -44,8 +49,11 @@ export default class RoleController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const id: string = req.params.id;
-      await prisma.role.delete({
-        where: { id },
+      // await prisma.role.delete({
+      //   where: { id },
+      // });
+      await Role.findOneAndDelete({
+        _id: id,
       });
 
       return res
@@ -60,7 +68,8 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const roles = await prisma.role.findMany();
+      // const roles = await prisma.role.findMany();
+      const roles = await Role.find();
       return res.status(StatusCodes.OK).json(roles);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
@@ -71,9 +80,13 @@ export default class RoleController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const requestData: RoleInterface = req.body;
-      const role = await prisma.role.findFirst({
-        where: { id: requestData._id },
+      // const requestData: RoleDto = req.body;
+      const id = req.params.id;
+      // const role = await prisma.role.findFirst({
+      //   where: { id: requestData._id },
+      // });
+      const role = await Role.findOne({
+        _id: id,
       });
 
       return res.status(StatusCodes.OK).json(role);

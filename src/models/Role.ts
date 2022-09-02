@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { RoleInterface } from "src/types/user.type";
-export const RoleSchema = new mongoose.Schema<RoleInterface>(
+import { RoleDto } from "src/types/user.type";
+export const RoleSchema = new mongoose.Schema<RoleDto>(
   {
     name: {
       type: String,
@@ -8,7 +8,7 @@ export const RoleSchema = new mongoose.Schema<RoleInterface>(
     description: {
       type: String,
     },
-    permission: [
+    permissions: [
       {
         type: {
           _id: mongoose.Schema.Types.ObjectId,

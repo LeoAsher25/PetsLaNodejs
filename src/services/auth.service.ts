@@ -1,17 +1,28 @@
-import { Prisma, User } from "@prisma/client";
 import JWT from "jsonwebtoken";
-import mongoose from "mongoose";
-import prisma from "src/config/prisma/prisma.config";
 import { ETokenType, TokenResponse } from "src/types/auth.type";
-import { UserInterface } from "src/types/user.type";
+import { SignUpUserData, UserDto } from "src/types/user.type";
+import bcrypt from "bcryptjs";
+import User from "src/models/User";
+import Session from "src/models/Session"; 
+import { Error } from "mongoose";
 
 const authService = {
-  encodedToken(userId: any, username: string, tokenType: ETokenType): string {
+  encodedToken(
+    userId: any,
+    username: string,
+    tokenType: ETokenType,
+    sessionId?: string | number
+  ): string {
+    const payload = {
+      sub: userId,
+      iss: username,
+      sessionId,
+    };
+    if (sessionId) {
+      payload["sessionId"] = sessionId;
+    }
     return JWT.sign(
-      {
-        sub: userId,
-        iss: username,
-      },
+      payload,
       tokenType === ETokenType.ACCESS_TOKEN
         ? process.env.JWT_SECRET_ACCESS_TOKEN!
         : process.env.JWT_SECRET_REFRESH_TOKEN!,
@@ -23,38 +34,35 @@ const authService = {
       }
     );
   },
-  handleError(error: any): { [key: string]: string } {
-    const returnedError: { [key: string]: string } = {};
-    if (error.message.includes("User validation failed")) {
-      Object.values((error as mongoose.Error.ValidationError).errors).forEach(
-        (err) => {
-          const _error = err as mongoose.Error.ValidatorError;
-          returnedError[_error.properties.path as string] =
-            _error.properties.message;
-        }
-      );
-    }
-
-    return returnedError;
-  },
-
-  async signUp(user: Prisma.UserCreateInput): Promise<User> {
+  async signUp(user: SignUpUserData): Promise<UserDto> {
     try {
-      const newUser = await prisma.user.create({
-        data: user,
-      });
+      // generate a salt
+      const salt = await bcrypt.genSalt(10);
+      // generate a password hash (salt + hash)
+      const passwordHashed = await bcrypt.hash(user.password, salt);
+      // re-assign password hashed
+      user.password = passwordHashed;
+      const newUser = await User.create(user);
       return newUser;
     } catch (err) {
       throw err;
     }
   },
 
-  async login(user: UserInterface): Promise<TokenResponse> {
+  async login(user: UserDto) {
     try {
+      const sessionId = Date.now();
       const accessToken: string = this.encodedToken(
-        user?.id,
-        user?.username,
-        ETokenType.ACCESS_TOKEN
+        user?._id,
+        user?.email,
+        ETokenType.ACCESS_TOKEN,
+        sessionId
+      );
+
+      const refreshToken: string = this.encodedToken(
+        user?._id,
+        user?.email,
+        ETokenType.REFRESH_TOKEN
       );
 
       let tokenResponse: TokenResponse = {
@@ -63,28 +71,25 @@ const authService = {
         refreshExpiresAt: Date.now() + Number(process.env.REFRESH_TOKEN_LIFE),
       };
 
-      const userToken = await prisma.userToken.findFirst({
-        where: {
-          userId: user?.id,
-        },
+      const session = await Session.findOne({
+        userId: user?._id,
       });
 
-      if (userToken) {
-        tokenResponse["refreshToken"] = userToken.token as string;
+      if (session) {
+        tokenResponse["refreshToken"] = session.sessionId as string;
       } else {
         const refreshToken: string = this.encodedToken(
-          user?.id,
-          user?.username,
+          user?._id,
+          user?.email,
           ETokenType.REFRESH_TOKEN
         );
-        await prisma.userToken.create({
-          data: {
-            userId: user?.id,
-            token: refreshToken,
-            expireAt: new Date(
-              Date.now() + Number(process.env.REFRESH_TOKEN_LIFE)
-            ),
-          },
+
+        await Session.create({
+          userId: user?._id,
+          sessionId: refreshToken,
+          expireAt: new Date(
+            Date.now() + Number(process.env.REFRESH_TOKEN_LIFE)
+          ),
         });
 
         tokenResponse["refreshToken"] = refreshToken;
@@ -111,7 +116,7 @@ const authService = {
           if (err) {
             throw err;
           } else {
-            tokenResponse["accessToken"] = authService.encodedToken(
+            tokenResponse["accessToken"] = this.encodedToken(
               decoded.sub,
               decoded.iss,
               ETokenType.ACCESS_TOKEN
@@ -123,6 +128,20 @@ const authService = {
     } catch (err) {
       throw err;
     }
+  },
+  handleError(error: any): { [key: string]: string } {
+    const returnedError: { [key: string]: string } = {};
+    if (error.message.includes("User validation failed")) {
+      Object.values((error as Error.ValidationError).errors).forEach(
+        (err) => {
+          const _error = err as Error.ValidatorError;
+          returnedError[_error.properties.path as string] =
+            _error.properties.message;
+        }
+      );
+    }
+
+    return returnedError;
   },
 };
 export default authService;

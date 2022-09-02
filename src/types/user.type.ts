@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface UserInterface extends mongoose.Document {
+export interface UserDto extends mongoose.Document {
   _id?: string;
   firstName: string;
   lastName: string;
@@ -8,19 +8,19 @@ export interface UserInterface extends mongoose.Document {
   email: string;
   password: string;
   age: Number;
-  addresses: IAddress[];
+  addresses: AddressDto[];
   role: string[];
   createdAt?: string;
   updatedAt?: string;
   verifyPassword?: (pw: string) => Promise<boolean>;
 }
 
-export type ISignUpData = Pick<
-  UserInterface,
+export type SignUpUserData = Pick<
+  UserDto,
   "firstName" | "lastName" | "email" | "password" | "username"
 >;
 
-export interface IAddress {
+export interface AddressDto {
   _id: string;
   phoneNumber: string;
   address: string;
@@ -34,11 +34,11 @@ export enum ERole {
   ADMINISTRATOR = "Administrator",
 }
 
-export interface RoleInterface {
+export interface RoleDto {
   _id?: string;
   name: ERole;
   description: string;
-  permission: string[];
+  permissions: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -49,15 +49,10 @@ export enum EPermission {
   MANAGE_USERS = "Manage users",
 }
 
-export interface PermissionInterface {
+export interface PermissionDto {
   _id?: string;
   name: EPermission;
   description: string;
   createdAt: Date;
   updatedAt: Date;
 }
-
-export declare type PermissionType = {
-  id: string;
-  name: string;
-};

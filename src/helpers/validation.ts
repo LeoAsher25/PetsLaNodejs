@@ -1,14 +1,6 @@
-const validationHelper = {
-  isValidEmail: (email: string) => {
-    const reg = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
-    return reg.test(email);
-  },
-  isValidUsername: (username: string) => {
-    return /^([a-zA-Z0-9]){8,32}/.test(username);
-  },
-  isValidPassword: (password: string) => {
-    return /^([a-zA-Z0-9]){8,32}/.test(password);
-  },
+const REGEX = {
+  email: /^[\w\.]+@([\w]+\.)+[\w]{2,7}$/,
+  password: /^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+  phone: /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/,
 };
-
-export default validationHelper;
+export default REGEX;

@@ -5,7 +5,7 @@ import { ParsedQs } from "qs";
 import authService from "src/services/auth.service";
 import { TokenResponse } from "src/types/auth.type";
 import { StatusCodes } from "src/types/status-code.enum";
-import { UserInterface } from "src/types/user.type";
+import { UserDto } from "src/types/user.type";
 
 export default class AuthController {
   tokenList: { [key: string]: object } = {};
@@ -17,7 +17,7 @@ export default class AuthController {
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
-    const postData: UserInterface = req.body;
+    const postData: UserDto = req.body;
     try {
       let user: Prisma.UserCreateInput = {
         firstName: postData.firstName,
@@ -46,7 +46,7 @@ export default class AuthController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const user = req.user as UserInterface;
+      const user = req.user as UserDto;
 
       const tokenResponse = await authService.login(user);
 

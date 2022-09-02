@@ -23,3 +23,4 @@ mainRouter
   .use("/products", productRouter)
 
   .use("/", passport.authenticate("jwt", { session: false }), protectedRouter);
+  

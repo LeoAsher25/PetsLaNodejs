@@ -5,8 +5,9 @@ import mongoose from "mongoose";
 import { ParsedQs } from "qs";
 import prisma from "src/config/prisma/prisma.config";
 import { CrudController } from "src/controllers/crud.controller";
+import User from "src/models/User";
 import { StatusCodes } from "src/types/status-code.enum";
-import { IAddress, UserInterface } from "src/types/user.type";
+import { AddressDto, UserDto } from "src/types/user.type";
 
 export default class UserController extends CrudController {
   public getAll = async (
@@ -14,7 +15,7 @@ export default class UserController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     try {
-      const query = req.query; 
+      const query = req.query;
       return res.status(StatusCodes.OK).json({ message: "oke" });
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
@@ -47,13 +48,20 @@ export default class UserController extends CrudController {
     res: Response<any, Record<string, any>>
   ): Promise<Response<any, Record<string, any>>> => {
     const requestData = req.body;
+    const id = req.params.id;
     try {
-      const updatedData = await prisma.user.update({
-        where: {
-          id: requestData._id,
+      // const updatedData = await prisma.user.update({
+      //   where: {
+      //     id: requestData._id,
+      //   },
+      //   data: requestData,
+      // });
+      const updatedData = await User.findOneAndUpdate(
+        {
+          _id: id,
         },
-        data: requestData,
-      });
+        requestData
+      );
 
       if (!updatedData) {
         return res.status(404).json({
@@ -88,7 +96,7 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     const user = req.user!;
     try {
-      return res.status(StatusCodes.OK).json((user as UserInterface).addresses);
+      return res.status(StatusCodes.OK).json((user as UserDto).addresses);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
@@ -100,8 +108,8 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const requestData = req.body;
-      const user = req.user as UserInterface;
-      const currentAddressList: IAddress[] = user.addresses;
+      const user = req.user as UserDto;
+      const currentAddressList: AddressDto[] = user.addresses;
       currentAddressList.unshift({
         ...requestData,
       });
@@ -109,22 +117,35 @@ export default class UserController extends CrudController {
       // await User.findOneAndUpdate(
       //   { _id: user._id },
       //   { ...user, addresses: currentAddressList }
-      // ); 
+      // );
 
-      const updatedUser = await prisma.user.update({
-        where: {
-          id: user._id,
+      // const updatedUser = await prisma.user.update({
+      //   where: {
+      //     id: user._id,
+      //   },
+      //   data: {
+      //     addresses: {
+      //       create: {
+      //         recipient: requestData.recipient,
+      //         address: requestData.address,
+      //         phoneNumber: requestData.phoneNumber,
+      //       },
+      //     },
+      //   },
+      // });
+      const updateUser = await User.update(
+        {
+          _id: user._id,
         },
-        data: {
-          addresses: {
-            create: {
-              recipient: requestData.recipient,
-              address: requestData.address,
-              phoneNumber: requestData.phoneNumber,
-            },
+        [
+          ...user.addresses,
+          {
+            recipient: requestData.recipient,
+            address: requestData.address,
+            phoneNumber: requestData.phoneNumber,
           },
-        },
-      });
+        ]
+      );
 
       return res.status(StatusCodes.OK).json({
         message: "Add address successfully!",
@@ -140,7 +161,7 @@ export default class UserController extends CrudController {
   ): Promise<Response<any, Record<string, any>>> => {
     try {
       const _id = req.query._id;
-      const user = req.user as UserInterface;
+      const user = req.user as UserDto;
 
       const index = user.addresses.findIndex((add) => add._id == _id);
       if (index < 0) {
@@ -152,12 +173,18 @@ export default class UserController extends CrudController {
       user.addresses.splice(index, 1);
 
       // await User.findOneAndUpdate({ _id: user._id }, user);
-      await prisma.user.update({
-        where: {
-          id: user._id,
+      // await prisma.user.update({
+      //   where: {
+      //     id: user._id,
+      //   },
+      //   data: user as Prisma.UserUpdateInput,
+      // });
+      await User.findOneAndUpdate(
+        {
+          _id: user._id,
         },
-        data: user as Prisma.UserUpdateInput,
-      });
+        user
+      );
       return res.status(StatusCodes.OK).json({
         message: "Delete address successfully!",
       });

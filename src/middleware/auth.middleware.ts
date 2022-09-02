@@ -1,65 +1,92 @@
 import { NextFunction, Request, Response } from "express";
-import prisma from "src/config/prisma/prisma.config";
-import { StatusCodes } from "src/types/status-code.enum";
-import { ISignUpData } from "src/types/user.type";
+import userError from "src/helpers/user-error";
+import REGEX from "src/helpers/validation";
+import User from "src/models/User";
+import { SignUpUserData } from "src/types/user.type";
+import bcrypt from "bcryptjs";
 
 const authMiddleware = {
   async checkSignUp(req: Request, res: Response, next: NextFunction) {
-    const requestData: ISignUpData = req.body;
-    if (
-      !requestData.firstName ||
-      !requestData.lastName ||
-      !requestData.email ||
-      !requestData.username ||
-      !requestData.password
-    ) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: "Fill in required entry fields!",
-      });
-    }
+    try {
+      const requestData: SignUpUserData = req.body;
 
-    const foundUserByEmail = await prisma.user.findFirst({
-      where: {
+      if (
+        !requestData.firstName ||
+        !requestData.lastName ||
+        !requestData.email ||
+        !requestData.password
+      ) {
+        throw userError.requireFields;
+      }
+
+      if (!REGEX.email.test(requestData.email)) {
+        throw userError.emailIsInvalid;
+      }
+
+      // if (!REGEX.password.test(requestData.password)) {
+      //   throw userError.emailPasswordIsIncorrect;
+      // }
+
+      const foundUserByEmail = await User.findOne({
         email: requestData.email,
-      },
-    });
-
-    if (foundUserByEmail) {
-      return res.status(StatusCodes.CONFLICT).json({
-        message: "Email is already in use.",
       });
+
+      if (foundUserByEmail) {
+        throw userError.emailIsInUse;
+      }
+      next();
+    } catch (err) {
+      next(err);
     }
+  },
 
-    const foundUserByUsername = await prisma.user.findFirst({
-      where: {
-        username: requestData.username,
-      },
-    });
-
-    if (foundUserByUsername) {
-      return res.status(StatusCodes.CONFLICT).json({
-        message: "Username is already in use.",
+  async checkLogin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const requestData = req.body;
+      if (!REGEX.email.test(requestData.email)) {
+        throw userError.emailIsInvalid;
+      }
+      // if (!REGEX.password.test(requestData.password)) {
+      //   throw userError.emailPasswordIsIncorrect;
+      // }
+      const user = await User.findOne({
+        email: requestData.email,
       });
-    }
 
-    next();
+      if (!user) {
+        throw userError.emailPasswordIsIncorrect;
+      }
+
+      const isCorrect = await bcrypt.compare(
+        requestData?.password,
+        user?.password!
+      );
+
+      if (!isCorrect) {
+        throw userError.emailPasswordIsIncorrect;
+      }
+
+      res.locals.user = user;
+      next();
+    } catch (err) {
+      next(err);
+    }
   },
   async checkRefeshToken(req: Request, res: Response, next: NextFunction) {
     const { refreshToken } = req.body;
     if (!refreshToken) {
-      return res.status(StatusCodes.NOT_FOUND).json({
-        message: "No refresh token supplied!",
-      });
+      throw userError.noToken;
     }
 
-    const foundToken = await prisma.userToken.findFirst({
-      where: { token: refreshToken },
-    });
-    if (!foundToken) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: "Invalid refresh token!",
-      });
-    }
+    // const foundToken = await Session.find({
+    //   token: refreshToken,
+    // });
+    // prisma.userToken.findFirst({
+    //   where: { token: refreshToken },
+    // });
+    // if (!foundToken) {
+    //   throw userError.invalidToken;
+    // }
     res.locals.refreshToken = refreshToken;
     next();
   },
