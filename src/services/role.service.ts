@@ -13,18 +13,43 @@ const roleService = {
       //     permissions: [...role.permissions, permission.id],
       //   },
       // });
-      const response1 = await Role.findOneAndUpdate({
-        _id: role._id,
-      });
+      const newRole = {
+        ...role,
+        permissions: [
+          ...(role.permissions || []),
+          { _id: permission._id, name: permission.name },
+        ],
+      };
+
+      const newPermission = {
+        ...permission,
+        roles: [
+          ...(permission.roles || []),
+          {
+            _id: role._id,
+            name: role.name,
+          },
+        ],
+      };
+
+      const response1 = await Role.findOneAndUpdate(
+        {
+          _id: role._id,
+        },
+        newRole
+      );
       // const response2 = await prisma.permission.update({
       //   where: { id: permission.id },
       //   data: {
       //     roles: [...permission.roles, role.id],
       //   },
       // });
-      const response2 = await Permission.findOneAndUpdate({
-        _id: permission._id,
-      });
+      const response2 = await Permission.findOneAndUpdate(
+        {
+          _id: permission._id,
+        },
+        newPermission
+      );
       if (response1 && response2) {
         return {
           message: "Assign permission successfully",
