@@ -21,7 +21,12 @@ protectedRouter
       checkRole(req, res, next, ERole.ADMINISTRATOR),
     roleRouter
   )
-  .use("/permissions", permissionRouter);
+  .use(
+    "/permissions",
+    (req: Request, res: Response, next: NextFunction) =>
+      checkRole(req, res, next, ERole.ADMINISTRATOR),
+    permissionRouter
+  );
 
 // mainRouter
 export const mainRouter = Router();

@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { CallbackError } from "mongoose";
 import passport from "passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
@@ -45,7 +46,11 @@ passport.use(
       const foundUser = await User.findOne({
         username,
       });
-      console.log("foundUser: ", foundUser);
+
+      const isValid = await bcrypt.compare(password, foundUser?.password!);
+      if (!isValid) {
+        return done(null, false);
+      }
 
       // if (!foundUser || foundUser.password !== password) {
       //   return done(null, false);

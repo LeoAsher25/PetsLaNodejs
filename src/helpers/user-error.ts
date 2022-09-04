@@ -41,5 +41,11 @@ const userError = {
     ErrorCodes.BAD_REQUEST,
     "Invalid refresh token!"
   ),
+
+  forbidden: new OkrError(
+    StatusCodes.FORBIDDEN,
+    ErrorCodes.FORBIDDEN,
+    "User doesn't have permission to access this resource"
+  ),
 };
 export default userError;
