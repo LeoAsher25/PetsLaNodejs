@@ -85,7 +85,7 @@ const roleMiddleware = {
       // });
       const role = await Role.findOne({
         _id: roleId,
-      });
+      }).lean();
       if (!role) {
         return res.status(StatusCodes.NOT_FOUND).json({
           message: "The role doesn't exists",
@@ -99,14 +99,19 @@ const roleMiddleware = {
       // });
       const permission = await Permission.findOne({
         _id: permissionId,
-      });
+      }).lean();
       if (!permission) {
         return res.status(StatusCodes.NOT_FOUND).json({
           message: "The permission doesn't exists",
         });
       }
 
-      if (role.permissions.includes(permissionId)) {
+      if (
+        role.permissions &&
+        role.permissions.some((item) => {
+          return item._id == permissionId;
+        })
+      ) {
         return res.status(StatusCodes.CONFLICT).json({
           message: "The role already has the permission",
         });

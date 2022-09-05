@@ -8,6 +8,14 @@ export const PermissionSchema = new mongoose.Schema<PermissionDto>(
     description: {
       type: String,
     },
+    roles: [
+      {
+        type: {
+          _id: mongoose.Schema.Types.ObjectId,
+          name: String,
+        },
+      },
+    ]
   },
   {
     timestamps: true,

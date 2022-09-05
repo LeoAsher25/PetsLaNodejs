@@ -26,7 +26,7 @@ export const UserSchema = new Schema<UserDto>(
     addresses: {
       type: [AddressSchema],
     },
-    role: [
+    roles: [
       {
         type: {
           _id: mongoose.Schema.Types.ObjectId,

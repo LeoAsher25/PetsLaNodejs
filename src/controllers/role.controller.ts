@@ -102,8 +102,7 @@ export default class RoleController extends CrudController {
     try {
       const { role, permission } = res.locals;
 
-      const response = await roleService.addPermission(role, permission);
-
+      const response = await roleService.addPermission(role, permission); 
       return res.status(StatusCodes.OK).json(response);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);

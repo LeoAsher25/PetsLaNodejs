@@ -9,7 +9,10 @@ export interface UserDto extends mongoose.Document {
   password: string;
   age: Number;
   addresses: AddressDto[];
-  role: string[];
+  roles: {
+    _id: string;
+    name: string;
+  }[];
   createdAt?: string;
   updatedAt?: string;
   verifyPassword?: (pw: string) => Promise<boolean>;
@@ -30,15 +33,18 @@ export interface AddressDto {
 }
 
 export enum ERole {
-  STAFF = "Staff",
-  ADMINISTRATOR = "Administrator",
+  STAFF = "STAFF",
+  ADMINISTRATOR = "ADMINISTRATOR",
 }
 
 export interface RoleDto {
   _id?: string;
   name: ERole;
   description: string;
-  permissions: string[];
+  permissions: {
+    _id: string;
+    name: string;
+  }[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -55,4 +61,8 @@ export interface PermissionDto {
   description: string;
   createdAt: Date;
   updatedAt: Date;
+  roles: {
+    _id: string;
+    name: string;
+  }[];
 }
