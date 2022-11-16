@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
@@ -19,7 +18,7 @@ export default class AuthController {
   ): Promise<Response<any, Record<string, any>>> => {
     const postData: UserDto = req.body;
     try {
-      let user: Prisma.UserCreateInput = {
+      let user = {
         firstName: postData.firstName,
         lastName: postData.lastName,
         username: postData.username,

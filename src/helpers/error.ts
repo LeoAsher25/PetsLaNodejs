@@ -1,6 +1,6 @@
 import { ErrorCodes } from "src/types/status-code.enum";
 
-export class OkrError extends Error {
+export class AppError extends Error {
   public status: number | undefined;
   public code: string | undefined;
   public constructor(status: number, code: ErrorCodes, message: string) {

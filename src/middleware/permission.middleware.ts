@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import prisma from "src/config/prisma/prisma.config";
 import Permission from "src/models/Permission";
 import { StatusCodes } from "src/types/status-code.enum";
-import { EPermission, PermissionDto } from "src/types/user.type";
+import { PermissionDto } from "src/types/user.type";
 
 const permissionMiddleware = {
   checkRequired: async (req: Request, res: Response, next: NextFunction) => {
@@ -22,11 +21,7 @@ const permissionMiddleware = {
     next: NextFunction
   ) => {
     const requestData: PermissionDto = req.body;
-    // const permission = await prisma.permission.findFirst({
-    //   where: {
-    //     name: requestData.name,
-    //   },
-    // });
+
     const permission = await Permission.findOne({
       name: requestData.name,
     });
@@ -42,11 +37,7 @@ const permissionMiddleware = {
 
   checkNotExist: async (req: Request, res: Response, next: NextFunction) => {
     const requestData: PermissionDto | string = req.body; // req body may be
-    // const permission = await prisma.permission.findFirst({
-    //   where: {
-    //     id: (requestData as PermissionDto)._id || (requestData as string),
-    //   },
-    // });
+
     const id = req.params.id;
     const permission = await Permission.findOne({
       _id: id,
@@ -60,21 +51,6 @@ const permissionMiddleware = {
       next();
     }
   },
-
-  // checkValid: async (req: Request, res: Response, next: NextFunction) => {
-  //   const requestData: PermissionDto = req.body;
-  //   if (
-  //     Object.values(EPermission).every(
-  //       (permission: string) => permission != requestData.name
-  //     )
-  //   ) {
-  //     return res.status(StatusCodes.BAD_REQUEST).json({
-  //       message: "The permission name is invalid",
-  //     });
-  //   } else {
-  //     next();
-  //   }
-  // },
 };
 
 export default permissionMiddleware;

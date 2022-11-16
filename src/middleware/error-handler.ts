@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ErrorResponse, OkrError } from "src/helpers/error";
+import { ErrorResponse, AppError } from "src/helpers/error";
 import { StatusCodes } from "src/types/status-code.enum";
 
 const ErrorHandler = (
@@ -8,7 +8,7 @@ const ErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  if (error && error instanceof OkrError) {
+  if (error && error instanceof AppError) {
     return res
       .status(error.status!)
       .json(ErrorResponse(error.code!, error.message));

@@ -55,6 +55,10 @@ app.use(express.static(appRootPath.path + "/public"));
 // );
 
 app.use("/api/v1", mainRouter);
+app.use("/", (req, res) => {
+  return res.send("Hello World!");
+});
+
 app.use(errorHandler);
 // logger.log("Hello", "hello World");
 // logger.error({
@@ -73,5 +77,5 @@ app.use(errorHandler);
 // });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`App is listening at http://localhost:${port}`);
 });

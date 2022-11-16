@@ -5,10 +5,6 @@ export abstract class CrudController {
     req: Request,
     res: Response
   ): Promise<Response<any, Record<string, any>>>;
-  // public abstract read(
-  //   req: Request,
-  //   res: Response
-  // ): Promise<Response<any, Record<string, any>>>;
   public abstract update(
     req: Request,
     res: Response

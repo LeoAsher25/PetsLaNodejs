@@ -1,42 +1,42 @@
 import { ErrorCodes, StatusCodes } from "src/types/status-code.enum";
-import { OkrError } from "./error";
+import { AppError } from "./error";
 
 const userError = {
-  requireFields: new OkrError(
+  requireFields: new AppError(
     StatusCodes.BAD_REQUEST,
     ErrorCodes.BAD_REQUEST,
     "Fill in required entry fields"
   ),
-  emailIsInUse: new OkrError(
+  emailIsInUse: new AppError(
     StatusCodes.CONFLICT,
     ErrorCodes.CONFLICT,
     "Email is already in use"
   ),
-  emailIsInvalid: new OkrError(
+  emailIsInvalid: new AppError(
     StatusCodes.BAD_REQUEST,
     ErrorCodes.BAD_REQUEST,
     "Email is invalid"
   ),
 
-  passwordIsInvalid: new OkrError(
+  passwordIsInvalid: new AppError(
     StatusCodes.BAD_REQUEST,
     ErrorCodes.BAD_REQUEST,
     "Password "
   ),
 
-  emailPasswordIsIncorrect: new OkrError(
+  emailPasswordIsIncorrect: new AppError(
     StatusCodes.BAD_REQUEST,
     ErrorCodes.BAD_REQUEST,
     "Email or password is incorrect"
   ),
 
-  noToken: new OkrError(
+  noToken: new AppError(
     StatusCodes.NOT_FOUND,
     ErrorCodes.NOT_FOUND,
     "No refresh token supplied!"
   ),
 
-  invalidToken: new OkrError(
+  invalidToken: new AppError(
     StatusCodes.BAD_REQUEST,
     ErrorCodes.BAD_REQUEST,
     "Invalid refresh token!"

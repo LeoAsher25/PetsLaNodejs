@@ -1,9 +1,7 @@
-import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import mongoose from "mongoose";
 import { ParsedQs } from "qs";
-import prisma from "src/config/prisma/prisma.config";
 import { CrudController } from "src/controllers/crud.controller";
 import User from "src/models/User";
 import { StatusCodes } from "src/types/status-code.enum";
@@ -50,12 +48,6 @@ export default class UserController extends CrudController {
     const requestData = req.body;
     const id = req.params.id;
     try {
-      // const updatedData = await prisma.user.update({
-      //   where: {
-      //     id: requestData._id,
-      //   },
-      //   data: requestData,
-      // });
       const updatedData = await User.findOneAndUpdate(
         {
           _id: id,
@@ -114,25 +106,6 @@ export default class UserController extends CrudController {
         ...requestData,
       });
 
-      // await User.findOneAndUpdate(
-      //   { _id: user._id },
-      //   { ...user, addresses: currentAddressList }
-      // );
-
-      // const updatedUser = await prisma.user.update({
-      //   where: {
-      //     id: user._id,
-      //   },
-      //   data: {
-      //     addresses: {
-      //       create: {
-      //         recipient: requestData.recipient,
-      //         address: requestData.address,
-      //         phoneNumber: requestData.phoneNumber,
-      //       },
-      //     },
-      //   },
-      // });
       const updateUser = await User.update(
         {
           _id: user._id,
@@ -172,13 +145,6 @@ export default class UserController extends CrudController {
 
       user.addresses.splice(index, 1);
 
-      // await User.findOneAndUpdate({ _id: user._id }, user);
-      // await prisma.user.update({
-      //   where: {
-      //     id: user._id,
-      //   },
-      //   data: user as Prisma.UserUpdateInput,
-      // });
       await User.findOneAndUpdate(
         {
           _id: user._id,

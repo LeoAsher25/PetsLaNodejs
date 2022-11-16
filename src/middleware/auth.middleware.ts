@@ -1,9 +1,9 @@
+import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
 import userError from "src/helpers/user-error";
 import REGEX from "src/helpers/validation";
 import User from "src/models/User";
 import { SignUpUserData } from "src/types/user.type";
-import bcrypt from "bcryptjs";
 
 const authMiddleware = {
   async checkSignUp(req: Request, res: Response, next: NextFunction) {
@@ -22,10 +22,6 @@ const authMiddleware = {
       if (!REGEX.email.test(requestData.email)) {
         throw userError.emailIsInvalid;
       }
-
-      // if (!REGEX.password.test(requestData.password)) {
-      //   throw userError.emailPasswordIsIncorrect;
-      // }
 
       const foundUserByEmail = await User.findOne({
         email: requestData.email,
@@ -46,9 +42,6 @@ const authMiddleware = {
       if (!REGEX.email.test(requestData.email)) {
         throw userError.emailIsInvalid;
       }
-      // if (!REGEX.password.test(requestData.password)) {
-      //   throw userError.emailPasswordIsIncorrect;
-      // }
       const user = await User.findOne({
         email: requestData.email,
       });
@@ -78,15 +71,6 @@ const authMiddleware = {
       throw userError.noToken;
     }
 
-    // const foundToken = await Session.find({
-    //   token: refreshToken,
-    // });
-    // prisma.userToken.findFirst({
-    //   where: { token: refreshToken },
-    // });
-    // if (!foundToken) {
-    //   throw userError.invalidToken;
-    // }
     res.locals.refreshToken = refreshToken;
     next();
   },
