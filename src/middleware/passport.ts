@@ -1,8 +1,11 @@
+import { AppError } from "src/helpers/error";
 import { CallbackError } from "mongoose";
 import passport from "passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import * as PassportLocal from "passport-local";
 import User from "src/models/User";
+import { UserDto } from "src/types/user.type";
+import { ErrorCodes } from "src/types/status-code.enum";
 
 passport.use(
   new Strategy(
@@ -14,11 +17,12 @@ passport.use(
       try {
         const user = await User.findOne({
           _id: payload.sub,
-        });
+        }).lean();
         if (!user) {
           return done(null, false);
         }
-        done(null, user);
+        const { password, ...foundUser } = user;
+        done(null, foundUser);
       } catch (error) {
         done(error, false);
       }
@@ -27,12 +31,27 @@ passport.use(
 );
 
 passport.use(
-  new PassportLocal.Strategy(async function (username, password, done) {
+  new PassportLocal.Strategy(async function (_username, _password, done) {
     try {
-      const foundUser = await User.findOne({
-        username,
+      const user = await User.findOne({
+        username: _username,
       });
-      console.log("foundUser: ", foundUser);
+
+      if (!user) {
+        return done(
+          new AppError(401, ErrorCodes.UNAUTHORIZED, "Username is not exist"),
+          false
+        );
+      }
+      const isCorrectPassword = await user.verifyPassword(_password!);
+      if (!isCorrectPassword) {
+        return done(
+          new AppError(401, ErrorCodes.UNAUTHORIZED, "Password is not correct"),
+          false
+        );
+      }
+
+      const { password, ...foundUser } = user.toObject();
 
       return done(null, foundUser);
     } catch (error) {

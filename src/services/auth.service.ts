@@ -3,7 +3,7 @@ import { ETokenType, TokenResponse } from "src/types/auth.type";
 import { SignUpUserData, UserDto } from "src/types/user.type";
 import bcrypt from "bcryptjs";
 import User from "src/models/User";
-import Session from "src/models/Session"; 
+import Session from "src/models/Session";
 import { Error } from "mongoose";
 
 const authService = {
@@ -132,13 +132,11 @@ const authService = {
   handleError(error: any): { [key: string]: string } {
     const returnedError: { [key: string]: string } = {};
     if (error.message.includes("User validation failed")) {
-      Object.values((error as Error.ValidationError).errors).forEach(
-        (err) => {
-          const _error = err as Error.ValidatorError;
-          returnedError[_error.properties.path as string] =
-            _error.properties.message;
-        }
-      );
+      Object.values((error as Error.ValidationError).errors).forEach((err) => {
+        const _error = err as Error.ValidatorError;
+        returnedError[_error.properties.path as string] =
+          _error.properties.message;
+      });
     }
 
     return returnedError;

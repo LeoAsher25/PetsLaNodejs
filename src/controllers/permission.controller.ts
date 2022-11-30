@@ -20,7 +20,6 @@ export default class PermissionController extends CrudController {
       const requestData: PermissionDto = req.body;
       const id = req.params.id;
 
-      console.log("params: ", req.params.id);
       const newPermission = await Permission.findOneAndUpdate(
         {
           _id: requestData._id,

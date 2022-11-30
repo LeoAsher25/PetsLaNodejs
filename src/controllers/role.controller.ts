@@ -27,9 +27,12 @@ export default class RoleController extends CrudController {
     try {
       const requestData: RoleDto = req.body;
       const id = req.params.id;
-      const newRole = await Role.findOneAndUpdate({
-        _id: id,
-      });
+      const newRole = await Role.findOneAndUpdate(
+        {
+          _id: id,
+        },
+        requestData
+      );
       return res.status(StatusCodes.OK).json(newRole);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);

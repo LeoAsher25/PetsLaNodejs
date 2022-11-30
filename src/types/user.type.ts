@@ -12,7 +12,7 @@ export interface UserDto extends mongoose.Document {
   role: string[];
   createdAt?: string;
   updatedAt?: string;
-  verifyPassword?: (pw: string) => Promise<boolean>;
+  verifyPassword: (pw: string) => Promise<boolean>;
 }
 
 export type SignUpUserData = Pick<

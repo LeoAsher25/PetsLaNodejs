@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import authService from "src/services/auth.service";
-import { TokenResponse } from "src/types/auth.type";
+import { RequestWithUser, TokenResponse } from "src/types/auth.type";
 import { StatusCodes } from "src/types/status-code.enum";
 import { UserDto } from "src/types/user.type";
 
@@ -13,9 +13,9 @@ export default class AuthController {
 
   // handle signup
   public handleSignup = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     const postData: UserDto = req.body;
     try {
       let user = {
@@ -41,9 +41,9 @@ export default class AuthController {
 
   //handle login
   public handleLogin = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     try {
       const user = req.user as UserDto;
 
@@ -58,9 +58,9 @@ export default class AuthController {
   };
 
   public handleRefreshToken = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
     try {
       const refreshToken = res.locals.refreshToken;
 
@@ -72,5 +72,12 @@ export default class AuthController {
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
+  };
+
+  public getProfile = async (
+    req: Request,
+    res: Response
+  ): Promise<Express.User> => {
+    return res.status(StatusCodes.OK).json(req.user!);
   };
 }
