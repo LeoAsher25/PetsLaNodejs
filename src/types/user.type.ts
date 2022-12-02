@@ -8,6 +8,7 @@ export interface UserDto extends mongoose.Document {
   email: string;
   password: string;
   age: Number;
+  phoneNumber: string;
   addresses: AddressDto[];
   role: string[];
   createdAt?: string;

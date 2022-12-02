@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const OrderItemSchema = new Schema({
-  title: String,
+  name: String,
   price: Number,
   quantity: Number,
 });

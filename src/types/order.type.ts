@@ -23,7 +23,7 @@ export enum EOrderStatus {
 
 export interface IOrderProduct {
   _id: string;
-  title: string;
+  name: string;
   price: number;
   quantity: number;
 }

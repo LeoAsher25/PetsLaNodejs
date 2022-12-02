@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const ProductSchema = new Schema(
   {
-    title: {
+    name: {
       type: String,
       required: true,
       maxlength: 200,
@@ -14,14 +14,25 @@ const ProductSchema = new Schema(
     price: {
       type: Number,
     },
-    categoryId: {
-      type: Schema.Types.ObjectId,
-    },
+    categories: [
+      {
+        type: Schema.Types.ObjectId,
+      },
+    ],
     images: {
       type: [String],
     },
     stock: {
       type: Number,
+    },
+    discounts: [
+      {
+        type: Schema.Types.ObjectId,
+      },
+    ],
+    status: {
+      type: Number, //0: INACTIVE, 1: SCHEDULED, 2:PULISHED
+      default: 0,
     },
   },
   {

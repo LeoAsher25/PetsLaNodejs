@@ -26,6 +26,10 @@ export const UserSchema = new Schema<UserDto>(
     addresses: {
       type: [AddressSchema],
     },
+    phoneNumber: {
+      type: String,
+      require: true,
+    },
     role: [
       {
         type: {

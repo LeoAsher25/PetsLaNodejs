@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import "src/middleware/passport";
+import Product from "src/models/Product";
 import authRouter from "src/routes/auth.router";
 import orderRouter from "src/routes/order.router";
 import permissionRouter from "src/routes/permission.router";
@@ -14,7 +15,28 @@ protectedRouter
   .use("/orders", orderRouter)
   .use("/users", userRouter)
   .use("/permissions", permissionRouter)
-  .use("/roles", roleRouter);
+  .use("/roles", roleRouter)
+  .use("/update", async (req, res) => {
+    try {
+      const response = await Product.updateMany(
+        {},
+        {
+          $set: {
+            status: Math.floor(Math.random() * 10) % 3,
+          },
+        }
+      );
+      if (response) {
+        console.log("res", response);
+      }
+      return res.status(200).json({
+        message: "Update successfully",
+      });
+    } catch (err) {
+      console.log("err", err);
+      throw err;
+    }
+  });
 
 // mainRouter
 export const mainRouter = Router();
