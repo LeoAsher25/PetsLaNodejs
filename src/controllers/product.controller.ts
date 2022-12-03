@@ -6,15 +6,28 @@ import Product from "src/models/Product";
 import { CrudController } from "./crud.controller";
 
 export default class ProductController extends CrudController {
-  public getAll = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
+  public getAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const allProduct = await Product.find({});
-      return res.status(200).json({
-        products: allProduct,
-      });
+      const query = req.query;
+      const { filterList } = res.locals;
+      console.log("query", filterList);
+      const allProduct = await Product.aggregate([
+        {
+          $match: {},
+        },
+        {
+          $facet: {
+            total: [
+              {
+                $count: "total",
+              },
+            ],
+            data: filterList,
+          },
+        },
+      ]);
+      console.log("allProduct", allProduct);
+      return res.status(200).json(allProduct);
     } catch (error) {
       return res.status(400).json(error);
     }

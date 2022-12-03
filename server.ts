@@ -2,7 +2,7 @@ require("dotenv").config();
 import appRootPath from "app-root-path";
 import express from "express";
 import connectDB from "src/config/db";
-import errorHandler from "src/middleware/error-handler";
+import errorHandler from "src/middleware/common/error-handler";
 import { mainRouter } from "src/routes";
 
 import cors from "cors";

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import paginationMiddleware from "src/middleware/common/pagination.middleware";
 import "src/middleware/passport";
 import Product from "src/models/Product";
 import authRouter from "src/routes/auth.router";
@@ -41,6 +42,7 @@ protectedRouter
 // mainRouter
 export const mainRouter = Router();
 mainRouter
+  .use(paginationMiddleware)
   .use("/auth", authRouter)
   .use("/products", productRouter)
   .use("/", passport.authenticate("jwt", { session: false }), protectedRouter);
