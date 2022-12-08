@@ -37,7 +37,7 @@ const paginationMiddleware = (
   //       { $addFields: { page: Number(req.query.page) || 0 } },
   //     ],
 
-  //     datas: filterList,
+  //     data: filterList,
   //   },
   // },
 
@@ -59,7 +59,7 @@ const paginationMiddleware = (
         { $addFields: { page: Number(req.query.page) || 0 } },
       ],
 
-      datas: filterList,
+      data: filterList,
     },
   };
 

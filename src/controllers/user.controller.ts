@@ -20,7 +20,7 @@ export default class UserController extends CrudController {
 
       return res.status(StatusCodes.OK).json({
         pagination: response[0].pagination[0],
-        datas: response[0].datas,
+        data: response[0].data,
       });
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
