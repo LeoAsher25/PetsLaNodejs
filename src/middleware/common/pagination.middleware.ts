@@ -10,7 +10,6 @@ const paginationMiddleware = (
   const { page, size, ...rest } = req.query;
   const _page = page ? Number(page) - 1 : DEFAULT_PAGE;
   const _pageSize = size ? Number(size) : DEFAULT_PAGE_SIZE;
-  let matchList: any = {};
 
   const keys = Object.keys(rest);
   const filterList: any[] = [];
@@ -29,6 +28,19 @@ const paginationMiddleware = (
   //   });
   // }
 
+  // {
+  //   $facet: {
+  //     pagination: [
+  //       {
+  //         $count: "total",
+  //       },
+  //       { $addFields: { page: Number(req.query.page) || 0 } },
+  //     ],
+
+  //     datas: filterList,
+  //   },
+  // },
+
   if (_pageSize) {
     filterList.push(
       {
@@ -38,9 +50,21 @@ const paginationMiddleware = (
     );
   }
 
-  console.log("filterList", JSON.stringify(filterList));
+  const paginationFilter = {
+    $facet: {
+      pagination: [
+        {
+          $count: "total",
+        },
+        { $addFields: { page: Number(req.query.page) || 0 } },
+      ],
+
+      datas: filterList,
+    },
+  };
 
   res.locals.filterList = filterList;
+  res.locals.paginationFilter = paginationFilter;
   next();
 };
 

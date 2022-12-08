@@ -3,33 +3,26 @@ import { ParamsDictionary } from "express-serve-static-core";
 import mongoose from "mongoose";
 import { ParsedQs } from "qs";
 import Product from "src/models/Product";
+import { StatusCodes } from "src/types/status-code.enum";
 import { CrudController } from "./crud.controller";
 
 export default class ProductController extends CrudController {
   public getAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const query = req.query;
-      const { filterList } = res.locals;
-      console.log("query", filterList);
-      const allProduct = await Product.aggregate([
+      const { paginationFilter } = res.locals;
+      const response = await Product.aggregate([
         {
           $match: {},
         },
-        {
-          $facet: {
-            total: [
-              {
-                $count: "total",
-              },
-            ],
-            data: filterList,
-          },
-        },
+        paginationFilter,
       ]);
-      console.log("allProduct", allProduct);
-      return res.status(200).json(allProduct);
+
+      return res.status(StatusCodes.OK).json({
+        pagination: response[0].pagination[0],
+        datas: response[0].datas,
+      });
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
   public getOne(

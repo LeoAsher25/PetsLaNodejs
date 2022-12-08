@@ -8,13 +8,20 @@ import { StatusCodes } from "src/types/status-code.enum";
 import { AddressDto, UserDto } from "src/types/user.type";
 
 export default class UserController extends CrudController {
-  public getAll = async (
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> => {
+  public getAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const query = req.query;
-      return res.status(StatusCodes.OK).json({ message: "oke" });
+      const { paginationFilter } = res.locals;
+      const response = await User.aggregate([
+        {
+          $match: {},
+        },
+        paginationFilter,
+      ]);
+
+      return res.status(StatusCodes.OK).json({
+        pagination: response[0].pagination[0],
+        datas: response[0].datas,
+      });
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
