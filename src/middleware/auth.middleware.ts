@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { NextFunction, Request, Response } from "express";
 import userError from "src/helpers/user-error";
-import REGEX from "src/helpers/validation";
+import ValidatorHelper from "src/helpers/validation";
 import User from "src/models/User";
 import { SignUpUserData } from "src/types/user.type";
 
@@ -19,7 +19,7 @@ const authMiddleware = {
         throw userError.requireFields;
       }
 
-      if (!REGEX.email.test(requestData.email)) {
+      if (!ValidatorHelper.email.test(requestData.email)) {
         throw userError.emailIsInvalid;
       }
 
@@ -39,7 +39,7 @@ const authMiddleware = {
   async checkLogin(req: Request, res: Response, next: NextFunction) {
     try {
       const requestData = req.body;
-      if (!REGEX.email.test(requestData.email)) {
+      if (!ValidatorHelper.email.test(requestData.email)) {
         throw userError.emailIsInvalid;
       }
       const user = await User.findOne({

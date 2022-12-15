@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import authService from "src/services/auth.service";
@@ -6,16 +6,16 @@ import { RequestWithUser, TokenResponse } from "src/types/auth.type";
 import { StatusCodes } from "src/types/status-code.enum";
 import { UserDto } from "src/types/user.type";
 
-export default class AuthController {
-  tokenList: { [key: string]: object } = {};
+// export default class AuthController {
 
-  constructor() {}
+//   constructor() {}
 
-  // handle signup
-  public handleSignup = async (
-    req: Request,
-    res: Response
-  ): Promise<Response> => {
+//   // handle signup
+
+// }
+
+const authController = {
+  async handleSignup(req: Request, res: Response): Promise<Response> {
     const postData: UserDto = req.body;
     try {
       let user = {
@@ -37,30 +37,28 @@ export default class AuthController {
         .status(StatusCodes.BAD_REQUEST)
         .json(authService.handleError(error));
     }
-  };
+  },
 
   //handle login
-  public handleLogin = async (
+  async handleLogin(
     req: Request,
-    res: Response
-  ): Promise<Response> => {
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
       const user = req.user as UserDto;
-
       const tokenResponse = await authService.login(user);
-
       return res.status(StatusCodes.OK).json(tokenResponse);
     } catch (err) {
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: (err as Error).message });
+      next(err);
     }
-  };
+  },
 
-  public handleRefreshToken = async (
+  async handleRefreshToken(
     req: Request,
-    res: Response
-  ): Promise<Response> => {
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
     try {
       const refreshToken = res.locals.refreshToken;
 
@@ -70,14 +68,12 @@ export default class AuthController {
 
       return res.status(StatusCodes.OK).json(tokenResponse);
     } catch (error) {
-      return res.status(StatusCodes.BAD_REQUEST).json(error);
+      next(error);
     }
-  };
+  },
 
-  public getProfile = async (
-    req: Request,
-    res: Response
-  ): Promise<Express.User> => {
+  async getProfile(req: Request, res: Response): Promise<Express.User> {
     return res.status(StatusCodes.OK).json(req.user!);
-  };
-}
+  },
+};
+export default authController;

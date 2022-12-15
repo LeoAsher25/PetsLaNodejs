@@ -1,10 +1,12 @@
-import JWT from "jsonwebtoken";
+import JWT, { JsonWebTokenError } from "jsonwebtoken";
 import { ETokenType, TokenResponse } from "src/types/auth.type";
 import { SignUpUserData, UserDto } from "src/types/user.type";
 import bcrypt from "bcryptjs";
 import User from "src/models/User";
 import Session from "src/models/Session";
 import { Error } from "mongoose";
+import { AppError } from "src/helpers/error";
+import { ErrorCodes, StatusCodes } from "src/types/status-code.enum";
 
 const authService = {
   encodedToken(
@@ -126,6 +128,13 @@ const authService = {
       );
       return tokenResponse;
     } catch (err) {
+      if (err instanceof JsonWebTokenError) {
+        throw new AppError(
+          StatusCodes.BAD_REQUEST,
+          ErrorCodes.BAD_REQUEST,
+          "Refresh Token is invalid"
+        );
+      }
       throw err;
     }
   },

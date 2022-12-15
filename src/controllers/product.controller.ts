@@ -25,11 +25,14 @@ export default class ProductController extends CrudController {
       return res.status(StatusCodes.BAD_REQUEST).json(error);
     }
   };
-  public getOne(
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    res: Response<any, Record<string, any>>
-  ): Promise<Response<any, Record<string, any>>> {
-    throw new Error("Method not implemented.");
+  public async getOne(req: Request, res: Response): Promise<Response> {
+    try {
+      const { _id } = req.params;
+      const response = await Product.findOne({ _id });
+      return res.status(StatusCodes.OK).json(response);
+    } catch (err) {
+      throw err;
+    }
   }
   public create = async (
     req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,

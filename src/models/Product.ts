@@ -31,8 +31,11 @@ const ProductSchema = new Schema(
       },
     ],
     status: {
-      type: Number, //0: INACTIVE, 1: SCHEDULED, 2:PULISHED
+      type: Number, //0: INACTIVE, 1: SCHEDULED, 2:PUBLISHED
       default: 0,
+    },
+    key: {
+      type: Number,
     },
   },
   {

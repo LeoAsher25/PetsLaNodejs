@@ -2,7 +2,7 @@ require("dotenv").config();
 import appRootPath from "app-root-path";
 import express from "express";
 import connectDB from "src/config/db";
-import errorHandler from "src/middleware/common/error-handler";
+import ErrorHandler from "src/middleware/common/error-handler";
 import { mainRouter } from "src/routes";
 
 import cors from "cors";
@@ -21,7 +21,7 @@ app.use(express.static(appRootPath.path + "/public"));
 
 app.use("/api/v1", mainRouter);
 
-app.use(errorHandler);
+app.use(ErrorHandler);
 // logger.log("Hello", "hello World");
 // logger.error({
 //   level: "error",
