@@ -45,4 +45,10 @@ mainRouter
   .use(paginationMiddleware)
   .use("/auth", authRouter)
   .use("/products", productRouter)
-  .use("/", passport.authenticate("jwt", { session: false }), protectedRouter);
+  .use("/", passport.authenticate("jwt", { session: false }), protectedRouter)
+  .get("/hello-world", (req, res) => {
+    // res.send("<p1> Hello World</p1>");
+    return res.json({
+      message: "Hello World",
+    });
+  });

@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/70747a45-3c9b-4627-a539-61e68c8269b0/AppServices/subscriptions/70747a45-3c9b-4627-a539-61e68c8269b0/resourceGroups/LeoAsher/providers/Microsoft.Web/sites/LeoAsher",
+  "appService.deploySubpath": "."
+}
